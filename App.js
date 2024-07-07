@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch, useParams, useHistory, useLocation } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-// Home component
 const Home = () => {
   const query = new URLSearchParams(useLocation().search);
   const uuid = query.get('uuid');
@@ -15,20 +16,36 @@ const Home = () => {
   );
 };
 
-// Component for handling /base/:uuid
 const YourComponent = () => {
   const { uuid } = useParams();
   const history = useHistory();
 
-  useEffect(() => {
-    // Automatically navigate to home with UUID when the component mounts
-    history.push(`/?uuid=${uuid}`);
+  React.useEffect(() => {
+    // Simulate some success or failure
+    const isSuccess = Math.random() < 0.5;
+
+    if (isSuccess) {
+      toast.success(`UUID: ${uuid} successfully processed!`);
+    } else {
+      toast.error(`Failed to process UUID: ${uuid}. Please try again.`);
+    }
+
+    // Redirect after 3 seconds
+    setTimeout(() => {
+      history.push(`/?uuid=${uuid}`);
+    }, 3000);
+
   }, [uuid, history]);
 
-  return null; // This component doesn't need to render anything
+  return (
+    <div>
+      <h2>Processing UUID: {uuid}</h2>
+      {/* Displaying toast container */}
+      <ToastContainer />
+    </div>
+  );
 };
 
-// NotFound component for handling unknown routes
 const NotFound = () => {
   return (
     <div>
@@ -38,10 +55,9 @@ const NotFound = () => {
   );
 };
 
-// Main App component
 const MyApp = () => {
   return (
-    <Router>
+    <Router basename="/Qrscanner">
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/base/:uuid" component={YourComponent} />
