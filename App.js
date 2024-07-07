@@ -7,23 +7,24 @@ import {
   Redirect
 } from 'react-router-dom';
 
-const Home = () => <div>Welcome to our qrscanner website redirectory</div>;
+const Home = () => <div>Welcome to the main page!</div>;
 
 const UUIDPage = () => {
-  let { uuid } = useParams();
+  let { base, uuid } = useParams();
   return (
     <div>
-      <h2>Redirecting you to your destination...</h2>
+      <h2>Detected Base: {base}</h2>
+      <h3>UUID/Text: {uuid}</h3>
     </div>
   );
 };
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Qrscanner">
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/:base/:uuid" component={UUIDPage} />
+        <Route path="/base/:uuid" component={UUIDPage} />
         <Redirect to="/" />
       </Switch>
     </Router>
