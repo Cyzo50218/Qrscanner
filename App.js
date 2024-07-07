@@ -57,8 +57,8 @@ const NotFound = () => {
 
 const MyApp = () => {
   return (
-    <Router basename="/Qrscanner">
-      <Switch>
+    <Router basename={process.env.PUBLIC_URL}>
+        <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/base/:uuid" component={YourComponent} />
         <Route component={NotFound} />
