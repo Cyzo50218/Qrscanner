@@ -2,16 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; URL=./index.html">
-  <title>Redirecting you to your destination...</title>
+  <title>Redirecting...</title>
   <script>
-    // Optional: Add additional logic if needed
-    setTimeout(function() {
-      window.location.href = './Qrscanner/index.html';
-    }, 0);  // Change delay time if needed
+    function redirectToHome() {
+      // Get the current URL
+      let currentUrl = window.location.href;
+
+      // Create a URL object from the current URL
+      let url = new URL(currentUrl);
+      let pathname = url.pathname;
+
+      // Extract the UUID if the path matches /base/:uuid
+      let match = pathname.match(/\/base\/([^/]+)/);
+
+      if (match) {
+        // Extracted UUID
+        let uuid = match[1];
+
+        // Base URL (excluding /base)
+        let baseUrl = url.origin + '/Qrscanner';
+
+        // Redirect to the index.html with uuid as a query parameter
+        window.location.href = `${baseUrl}/index.html?uuid=${uuid}`;
+      } else {
+        // If no /base/:uuid pattern is found, redirect to the homepage without parameters
+        window.location.href = `${url.origin}/Qrscanner/index.html`;
+      }
+    }
+
+    // Redirect after a delay of 3 seconds
+    setTimeout(redirectToHome, 3000);
   </script>
 </head>
 <body>
-  <!-- Optional: You can add loading indicators or messages here -->
+  <p>Page not found. Redirecting to homepage in 3 seconds...</p>
 </body>
 </html>
