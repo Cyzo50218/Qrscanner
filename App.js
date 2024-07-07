@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch, useParams, useHistory, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, useParams, useLocation } from 'react-router-dom';
 
 // Home component
 const Home = () => {
@@ -18,12 +18,11 @@ const Home = () => {
 // Component for handling /base/:uuid
 const YourComponent = () => {
   const { uuid } = useParams();
-  const history = useHistory();
 
   useEffect(() => {
-    // Automatically navigate to home with UUID when the component mounts
-    history.push(`/?uuid=${uuid}`);
-  }, [uuid, history]);
+    // Automatically navigate to index.html with UUID when the component mounts
+    window.location.href = `index.html?uuid=${uuid}`;
+  }, [uuid]);
 
   return null; // This component doesn't need to render anything
 };
@@ -52,4 +51,3 @@ const MyApp = () => {
 };
 
 export default MyApp;
-
