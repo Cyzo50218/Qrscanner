@@ -23,7 +23,7 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/base/:uuid" component={UUIDPage} />
+        <Route path="/:base/:uuid" component={UUIDPage} />
         <Redirect to="/" />
       </Switch>
     </Router>
