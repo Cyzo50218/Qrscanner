@@ -2,7 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://cyzo50218.github.io/Qrdirectory",
+  "homepage": "https://cyzo50218.github.io/Qrscanner",
   "dependencies": {
     "react-router-dom": "^6.24.1"
   }
