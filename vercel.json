@@ -1,8 +1,7 @@
-// vercel.json
 {
   "rewrites": [
     { "source": "/main.js", "destination": "/404" },
     { "source": "/App.js", "destination": "/404" },
-    { "source": "/(.*)", "destination": "/$1" } // Redirect all other requests normally
+    { "source": "/(.*)", "destination": "/$1" } 
   ]
 }
