@@ -4,6 +4,17 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React, { useState } from 'react';
 
+const App = () => {
+  return (
+    <Router basename={process.env.PUBLIC_URL}>
+        <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/base/:uuid" component={YourComponent} />
+        <Route component={NotFound} />
+      </Switch>
+    </Router>
+  );
+
 
 const Home = () => {
   const query = new URLSearchParams(useLocation().search);
@@ -58,18 +69,6 @@ const NotFound = () => {
     </div>
   );
 };
-
-const App = () => {
-  return (
-    <Router basename={process.env.PUBLIC_URL}>
-        <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/base/:uuid" component={YourComponent} />
-        <Route component={NotFound} />
-      </Switch>
-    </Router>
-  );
-
 const [authenticated, setAuthenticated] = useState(false);
   const [secretKey, setSecretKey] = useState('');
 
