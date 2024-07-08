@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch, useParams, useHistory, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from 'react';
+
 
 const Home = () => {
   const query = new URLSearchParams(useLocation().search);
@@ -15,6 +17,8 @@ const Home = () => {
     </div>
   );
 };
+
+  
 
 const YourComponent = () => {
   const { uuid } = useParams();
@@ -55,7 +59,7 @@ const NotFound = () => {
   );
 };
 
-const MyApp = () => {
+const App = () => {
   return (
     <Router basename={process.env.PUBLIC_URL}>
         <Switch>
@@ -65,6 +69,45 @@ const MyApp = () => {
       </Switch>
     </Router>
   );
+
+const [authenticated, setAuthenticated] = useState(false);
+  const [secretKey, setSecretKey] = useState('');
+
+  const handleLogin = () => {
+    // Check if the entered key matches the secret key
+    if (secretKey === 'yourSecretKey') {
+      localStorage.setItem('authenticated', 'true');
+      setAuthenticated(true);
+    } else {
+      alert('Invalid secret key!');
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authenticated');
+    setAuthenticated(false);
+  };
+
+  return (
+    <div>
+      {!authenticated ? (
+        <div>
+          <input
+            type="password"
+            value={secretKey}
+            onChange={(e) => setSecretKey(e.target.value)}
+            placeholder="Enter secret key"
+          />
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      ) : (
+        <div>
+          <h1>Authenticated Content</h1>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      )}
+    </div>
+  );
 };
 
-export default MyApp;
+export default App;
