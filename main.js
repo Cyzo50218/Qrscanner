@@ -3,6 +3,36 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
 import { getFirestore, doc, getDoc, updateDoc, setDoc, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
+import React, { useEffect, useState } from 'react';
+
+const main = () => {
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if user is authenticated when component mounts
+    const isAuthenticated = localStorage.getItem('authenticated') === 'true';
+    setAuthenticated(isAuthenticated);
+  }, []);
+
+  return (
+    <div>
+      {authenticated ? (
+        <div>
+          <h2>Main Content</h2>
+          {/* Main component content */}
+        </div>
+      ) : (
+        <div>
+          <h2>Access Denied</h2>
+          <p>Please login with the secret key.</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default main;
+    
 const firebaseConfig = {
   apiKey: "AIzaSyDPXfq-rqK87OyVh0p9n0iEzIUGcxEDLW0",
   authDomain: "qrscanner-1a132.firebaseapp.com",
