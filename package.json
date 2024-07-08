@@ -1,6 +1,6 @@
 {
-  "name": "Qrscanner",
-  "version": "0.1.0",
+  "name": "qrscanner",
+  "version": "1.0.0",
   "private": true,
   "homepage": "https://cyzo50218.github.io/Qrscanner",
   "dependencies": {
