@@ -20,13 +20,13 @@
         let uuid = match[1];
 
         // Base URL (excluding /base)
-        let baseUrl = url.origin + '/Qrscanner';
+        let baseUrl = url.origin;
 
         // Redirect to the index.html with uuid as a query parameter
         window.location.href = `${baseUrl}/index.html?uuid=${uuid}`;
       } else {
         // If no /base/:uuid pattern is found, redirect to the homepage without parameters
-        window.location.href = `${url.origin}/Qrscanner/index.html`;
+        window.location.href = `${url.origin}/index.html`;
       }
     }
 
