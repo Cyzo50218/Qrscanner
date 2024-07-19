@@ -1,7 +1,14 @@
 {
-  "rewrites": [
-    { "source": "/main.js", "destination": "/404" },
-    { "source": "/App.js", "destination": "/404" },
-    { "source": "/(.*)", "destination": "/$1" } 
+  "builds": [
+    { "src": "subscription/yearly/api/orders.js", "use": "@vercel/node" },
+    { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/subscription/yearly/api/orders", "dest": "/subscription/yearly/api/orders.js" },
+    { "src": "/subscription/yearly/api/orders/:orderID/capture", "dest": "/subscription/yearly/api/captureOrder.js" },
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/main.js", "dest": "/404" },
+    { "src": "/App.js", "dest": "/404" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
