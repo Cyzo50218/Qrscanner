@@ -2,6 +2,7 @@
   "builds": [
     { "src": "subscription/yearly/api/orders.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" },
+    { "src": "client/**", "use": "@vercel/static" },
     { "src": "index.html", "use": "@vercel/static" }
   ],
   "routes": [
@@ -9,6 +10,9 @@
     { "src": "/subscription/yearly/api/orders/:orderID/capture", "dest": "/subscription/yearly/api/captureOrder.js" },
     { "src": "/main.js", "status": 404 },
     { "src": "/App.js", "status": 404 },
-    { "src": "/((?!api/).*)", "dest": "/index.html" }
+    { "src": "^/$", "dest": "/index.html" },
+    { "src": "/client", "dest": "/client/index.html" },
+    { "src": "/client/(.*)", "dest": "/client/$1" },
+    { "src": "/((?!api/)(?!client/).*)", "dest": "/index.html" }
   ]
 }
