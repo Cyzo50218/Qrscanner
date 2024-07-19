@@ -8,11 +8,19 @@
   "routes": [
     { "src": "/subscription/yearly/api/orders", "dest": "/subscription/yearly/api/orders.js" },
     { "src": "/subscription/yearly/api/orders/:orderID/capture", "dest": "/subscription/yearly/api/captureOrder.js" },
+    { 
+      "src": "/client/(.*)", 
+      "dest": "/client/$1",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.paypal.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-src https://www.paypal.com;"
+      }
+    },
     { "src": "/main.js", "status": 404 },
     { "src": "/App.js", "status": 404 },
     { "src": "^/$", "dest": "/index.html" },
     { "src": "/client", "dest": "/client/index.html" },
-    { "src": "/client/(.*)", "dest": "/client/$1" },
     { "src": "/((?!api/)(?!client/).*)", "dest": "/index.html" }
   ]
 }
+
+
