@@ -20,10 +20,16 @@ export const generateAccessToken = async () => {
       },
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch access token: ${errorText}`);
+    }
+
     const data = await response.json();
     return data.access_token;
   } catch (error) {
     console.error("Failed to generate Access Token:", error);
+    throw error;
   }
 };
 
@@ -36,50 +42,70 @@ export const handleResponse = async (response) => {
     };
   } catch (err) {
     const errorMessage = await response.text();
-    throw new Error(errorMessage);
+    console.error("Failed to parse JSON response:", errorMessage);
+    throw new Error(`Failed to parse response: ${errorMessage}`);
   }
 };
 
 export const createOrder = async (cart) => {
-  const accessToken = await generateAccessToken();
-  const url = `${base}/v2/checkout/orders`;
+  try {
+    const accessToken = await generateAccessToken();
+    const url = `${base}/v2/checkout/orders`;
 
-  const payload = {
-    intent: "CAPTURE",
-    purchase_units: [
-      {
-        amount: {
-          currency_code: "USD",
-          value: "30",
+    const payload = {
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "USD",
+            value: "30", // Example static value
+          },
         },
+      ],
+    };
+
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
-    ],
-  };
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
 
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to create order: ${errorText}`);
+    }
 
-  return handleResponse(response);
+    return handleResponse(response);
+  } catch (error) {
+    console.error("Failed to create order:", error);
+    throw error;
+  }
 };
 
 export const captureOrder = async (orderID) => {
-  const accessToken = await generateAccessToken();
-  const url = `${base}/v2/checkout/orders/${orderID}/capture`;
+  try {
+    const accessToken = await generateAccessToken();
+    const url = `${base}/v2/checkout/orders/${orderID}/capture`;
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-  return handleResponse(response);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to capture order: ${errorText}`);
+    }
+
+    return handleResponse(response);
+  } catch (error) {
+    console.error("Failed to capture order:", error);
+    throw error;
+  }
 };
-  
