@@ -2,6 +2,7 @@
   "builds": [
     { "src": "subscription/yearly/api/orders.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" },
+    { "src": "subscription/yearly/api/paypalHelpers.js", "use": "@vercel/node" },
     { "src": "client/**", "use": "@vercel/static" },
     { "src": "index.html", "use": "@vercel/static" }
   ],
@@ -21,5 +22,10 @@
     { "src": "^/$", "dest": "/index.html" },
     { "src": "/client", "dest": "/client/index.html" },
     { "src": "/((?!api/)(?!client/).*)", "dest": "/index.html" }
-  ]
+  ],
+  "functions": {
+    "subscription/yearly/api/**/*.js": {
+      "runtime": "nodejs18"
+    }
+  }
 }
