@@ -11,7 +11,7 @@ app.post("/orders", async (req, res) => {
     res.status(httpStatusCode).json(jsonResponse);
   } catch (error) {
     console.error("Failed to create order:", error);
-    res.status(500).json({ error: "Failed to create order." });
+    res.status(500).json({ error: error.message || "Failed to create order." });
   }
 });
 
