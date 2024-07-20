@@ -1,8 +1,11 @@
 import express from 'express';
-import { captureOrder } from './paypalHelpers.js';
+import path from 'path'; // Importing path to log the resolved path
 
 const app = express();
 app.use(express.json());
+
+// Log the resolved path
+console.log('Resolved path:', path.resolve('./paypalHelpers.js'));
 
 app.post("/orders/:orderID/capture", async (req, res) => {
   try {
