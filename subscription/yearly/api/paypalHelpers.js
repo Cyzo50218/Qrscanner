@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import "dotenv/config";
 
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
@@ -9,6 +8,7 @@ export const generateAccessToken = async () => {
     if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
       throw new Error("MISSING_API_CREDENTIALS");
     }
+    const fetch = (await import('node-fetch')).default;
     const auth = Buffer.from(
       PAYPAL_CLIENT_ID + ":" + PAYPAL_CLIENT_SECRET
     ).toString("base64");
@@ -17,6 +17,7 @@ export const generateAccessToken = async () => {
       body: "grant_type=client_credentials",
       headers: {
         Authorization: `Basic ${auth}`,
+        "Content-Type": "application/x-www-form-urlencoded", // Add this header
       },
     });
 
@@ -50,6 +51,7 @@ export const handleResponse = async (response) => {
 export const createOrder = async (cart) => {
   try {
     const accessToken = await generateAccessToken();
+    const fetch = (await import('node-fetch')).default;
     const url = `${base}/v2/checkout/orders`;
 
     const payload = {
@@ -88,6 +90,7 @@ export const createOrder = async (cart) => {
 export const captureOrder = async (orderID) => {
   try {
     const accessToken = await generateAccessToken();
+    const fetch = (await import('node-fetch')).default;
     const url = `${base}/v2/checkout/orders/${orderID}/capture`;
 
     const response = await fetch(url, {
