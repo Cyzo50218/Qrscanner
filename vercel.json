@@ -22,10 +22,5 @@
     { "src": "^/$", "dest": "/index.html" },
     { "src": "/client", "dest": "/client/index.html" },
     { "src": "/((?!api/)(?!client/).*)", "dest": "/index.html" }
-  ],
-  "functions": {
-    "subscription/yearly/api/**/*.js": {
-      "runtime": "nodejs18"
-    }
+  ]
   }
-}
