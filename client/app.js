@@ -1,19 +1,23 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // (function() {
-  // Function to display result messages
-  function resultMessage(message) {
-    const container = document.querySelector("#result-message");
-    container.innerHTML = message;
-  }
+// Check if the PayPal SDK is loaded
+function loadPayPalScript() {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = "https://www.paypal.com/sdk/js?client-id=AdchnSRplQeuN4_MaZwIFzhl4iQ_nFP7ARTZnfJ3E7H-_rPbnLpsbKgdLf098LVoSFipi-q9Y3NE5N3C&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo";
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error('Failed to load PayPal SDK'));
+    document.body.appendChild(script);
+  });
+}
 
-  // Check if PayPal SDK is loaded
+// Initialize PayPal buttons after the SDK is loaded
+function initPayPalButtons() {
   if (typeof paypal === 'undefined') {
     console.error('PayPal SDK not loaded');
-    resultMessage('PayPal SDK failed to load. Please try again later.');
+    document.getElementById('result-message').textContent = 'PayPal SDK failed to load. Please try again later.';
     return;
   }
 
-  // PayPal button configuration
   paypal.Buttons({
     style: {
       shape: "pill",
@@ -25,39 +29,26 @@ document.addEventListener('DOMContentLoaded', function() {
       try {
         const response = await fetch("/subscription/yearly/api/orders", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cart: [
-              {
-                id: "yearlyaccess4772",
-                quantity: "1",
-              },
-            ],
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cart: [{ id: "yearlyaccess4772", quantity: "1" }] }),
         });
         const orderData = await response.json();
         if (orderData.id) {
           return orderData.id;
         }
         const errorDetail = orderData?.details?.[0];
-        const errorMessage = errorDetail
-          ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-          : JSON.stringify(orderData);
+        const errorMessage = errorDetail ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})` : JSON.stringify(orderData);
         throw new Error(errorMessage);
       } catch (error) {
         console.error(error);
-        resultMessage(`Could not initiate PayPal Checkout...<br><br>${error}`);
+        document.getElementById('result-message').innerHTML = `Could not initiate PayPal Checkout...<br><br>${error}`;
       }
     },
     async onApprove(data, actions) {
       try {
         const response = await fetch(`/subscription/yearly/api/orders/${data.orderID}/capture`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
         const orderData = await response.json();
         const errorDetail = orderData?.details?.[0];
@@ -68,34 +59,26 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (!orderData.purchase_units) {
           throw new Error(JSON.stringify(orderData));
         } else {
-          const transaction =
-            orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
-            orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
-          resultMessage(
-            `Transaction ${transaction.status}: ${transaction.id}<br>
-            <br>See console for all available details`
-          );
-          console.log(
-            "Capture result",
-            orderData,
-            JSON.stringify(orderData, null, 2)
-          );
+          const transaction = orderData?.purchase_units?.[0]?.payments?.captures?.[0] || orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
+          document.getElementById('result-message').innerHTML = `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`;
+          console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
         }
       } catch (error) {
         console.error(error);
-        resultMessage(
-          `Sorry, your transaction could not be processed...<br><br>${error}`
-        );
+        document.getElementById('result-message').innerHTML = `Sorry, your transaction could not be processed...<br><br>${error}`;
       }
     },
     onError: (err) => {
       console.error(err);
-      resultMessage(`An error occurred: ${err}`);
+      document.getElementById('result-message').textContent = `An error occurred: ${err}`;
     },
-  })
-  .render("#paypal-button-container")
-  .catch(error => {
-    console.error('Failed to render PayPal Buttons:', error);
-    resultMessage('Failed to initialize PayPal. Please try again later.');
+  }).render("#paypal-button-container");
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadPayPalScript().then(initPayPalButtons).catch(error => {
+    console.error('Failed to load PayPal SDK:', error);
+    document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
   });
-})();
+});
+
