@@ -1,14 +1,14 @@
 import express from 'express';
 import { createOrder } from './paypalHelpers.js';
-import path from 'path'; // Importing path to log the resolved path
+import path from 'path';
 
 const app = express();
 app.use(express.json());
 
-// Log the resolved path
-console.log('Resolved path:', path.resolve('./paypalHelpers.js'));
+// Log the resolved path for debugging
+console.log('Resolved path to paypalHelpers.js:', path.resolve('./paypalHelpers.js'));
 
-app.post("/orders", async (req, res) => {
+app.post("/subscription/yearly/api/orders", async (req, res) => {
   try {
     const { cart } = req.body;
     const { jsonResponse, httpStatusCode } = await createOrder(cart);
