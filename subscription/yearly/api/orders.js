@@ -1,5 +1,5 @@
 import express from 'express';
-import { createOrder } from './paypalHelpers';
+import { createOrder } from './paypalHelpers.js';
 
 const app = express();
 app.use(express.json());
