@@ -1,4 +1,3 @@
-// Check if the PayPal SDK is loaded
 document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM fully loaded and parsed.");
   
@@ -55,6 +54,7 @@ function initPayPalButtons() {
       .catch(error => {
         console.error("Error creating order:", error);
         document.getElementById('result-message').innerHTML = `Could not initiate PayPal Checkout...<br><br>${error}`;
+        throw error;
       });
     },
     onApprove(data, actions) {
@@ -93,5 +93,6 @@ function initPayPalButtons() {
     document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
   });
 }
+
 
 
