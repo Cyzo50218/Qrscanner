@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM fully loaded and parsed.");
-  
+
   loadPayPalScript().then(initPayPalButtons).catch(error => {
     console.error('Failed to load PayPal SDK:', error);
     document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
@@ -53,7 +53,7 @@ function initPayPalButtons() {
       })
       .catch(error => {
         console.error("Error creating order:", error);
-        document.getElementById('result-message').innerHTML = `Could not initiate PayPal Checkout...<br><br>${error}`;
+        document.getElementById('result-message').innerHTML = `Could not initiate PayPal Checkout...<br><br>${error.message}`;
         throw error;
       });
     },
@@ -81,18 +81,15 @@ function initPayPalButtons() {
       })
       .catch(error => {
         console.error("Error capturing order:", error);
-        document.getElementById('result-message').innerHTML = `Sorry, your transaction could not be processed...<br><br>${error}`;
+        document.getElementById('result-message').innerHTML = `Sorry, your transaction could not be processed...<br><br>${error.message}`;
       });
     },
     onError: (err) => {
       console.error("PayPal Buttons Error:", err);
-      document.getElementById('result-message').textContent = `An error occurred: ${err}`;
+      document.getElementById('result-message').textContent = `An error occurred: ${err.message}`;
     },
   }).render("#paypal-button-container").catch(error => {
     console.error('Failed to render PayPal Buttons:', error);
     document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
   });
 }
-
-
-
