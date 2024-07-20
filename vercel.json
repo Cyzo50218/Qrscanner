@@ -1,7 +1,8 @@
 {
   "builds": [
     { "src": "subscription/yearly/api/orders.js", "use": "@vercel/node" },
-    { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" },{ "src": "client/**", "use": "@vercel/static" },
+    { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" },
+    { "src": "client/**", "use": "@vercel/static" },
     { "src": "index.html", "use": "@vercel/static" }
   ],
   "routes": [
@@ -11,7 +12,7 @@
       "src": "/client/(.*)", 
       "dest": "/client/$1",
       "headers": {
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.paypal.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-src https://www.paypal.com; connect-src https://www.paypal.com;"
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.paypal.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-src https://www.paypal.com; connect-src https://www.paypal.com https://www.sandbox.paypal.com;"
       }
     },
     { "src": "/(.*)", "dest": "/client/index.html" },
@@ -22,8 +23,3 @@
     { "src": "/((?!api/)(?!client/).*)", "dest": "/index.html" }
   ]
 }
-
-
-
-
-
