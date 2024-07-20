@@ -1,4 +1,13 @@
 // Check if the PayPal SDK is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("DOM fully loaded and parsed.");
+  
+  loadPayPalScript().then(initPayPalButtons).catch(error => {
+    console.error('Failed to load PayPal SDK:', error);
+    document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
+  });
+});
+
 function loadPayPalScript() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
@@ -10,13 +19,14 @@ function loadPayPalScript() {
   });
 }
 
-// Initialize PayPal buttons after the SDK is loaded
 function initPayPalButtons() {
   if (typeof paypal === 'undefined') {
     console.error('PayPal SDK not loaded');
     document.getElementById('result-message').textContent = 'PayPal SDK failed to load. Please try again later.';
     return;
   }
+
+  console.log("Initializing PayPal Buttons...");
 
   paypal.Buttons({
     style: {
@@ -25,32 +35,37 @@ function initPayPalButtons() {
       color: "blue",
       label: "subscribe",
     },
-    async createOrder() {
-      try {
-        const response = await fetch("/subscription/yearly/api/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cart: [{ id: "yearlyaccess4772", quantity: "1" }] }),
-        });
-        const orderData = await response.json();
+    createOrder() {
+      console.log("Creating order...");
+      return fetch("/subscription/yearly/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart: [{ id: "yearlyaccess4772", quantity: "1" }] }),
+      })
+      .then(response => response.json())
+      .then(orderData => {
+        console.log("Order created:", orderData);
         if (orderData.id) {
           return orderData.id;
         }
         const errorDetail = orderData?.details?.[0];
         const errorMessage = errorDetail ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})` : JSON.stringify(orderData);
         throw new Error(errorMessage);
-      } catch (error) {
-        console.error(error);
+      })
+      .catch(error => {
+        console.error("Error creating order:", error);
         document.getElementById('result-message').innerHTML = `Could not initiate PayPal Checkout...<br><br>${error}`;
-      }
+      });
     },
-    async onApprove(data, actions) {
-      try {
-        const response = await fetch(`/subscription/yearly/api/orders/${data.orderID}/capture`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
-        const orderData = await response.json();
+    onApprove(data, actions) {
+      console.log("Order approved:", data);
+      return fetch(`/subscription/yearly/api/orders/${data.orderID}/capture`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      })
+      .then(response => response.json())
+      .then(orderData => {
+        console.log("Order captured:", orderData);
         const errorDetail = orderData?.details?.[0];
         if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
           return actions.restart();
@@ -63,22 +78,20 @@ function initPayPalButtons() {
           document.getElementById('result-message').innerHTML = `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`;
           console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
         }
-      } catch (error) {
-        console.error(error);
+      })
+      .catch(error => {
+        console.error("Error capturing order:", error);
         document.getElementById('result-message').innerHTML = `Sorry, your transaction could not be processed...<br><br>${error}`;
-      }
+      });
     },
     onError: (err) => {
-      console.error(err);
+      console.error("PayPal Buttons Error:", err);
       document.getElementById('result-message').textContent = `An error occurred: ${err}`;
     },
-  }).render("#paypal-button-container");
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadPayPalScript().then(initPayPalButtons).catch(error => {
-    console.error('Failed to load PayPal SDK:', error);
+  }).render("#paypal-button-container").catch(error => {
+    console.error('Failed to render PayPal Buttons:', error);
     document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
   });
-});
+}
+
 
