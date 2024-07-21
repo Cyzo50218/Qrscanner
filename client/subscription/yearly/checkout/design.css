@@ -1,0 +1,33 @@
+.messages {
+  font-size: 18px;
+  color: #2C81BC;
+  padding-bottom: 15px;
+  text-shadow: 0 0 1px #2C81BC;
+}
+
+
+
+.title{
+  padding-top: 15px;
+  font-size: 35px;
+  color: #0C9AF4;
+ font-weight: bold;
+}
+.message2{
+  font-size: 18px;
+font-weight: bold;
+  color: #0C356D;
+  padding-bottom: 10px;
+}
+
+.watermark{
+color: #264268;
+font-weight: bold;
+padding-top: 10px;
+}
+.bestoffer{
+  color: #24AAEB;
+font-weight: bold;
+font-size: 20px;
+padding-top: 5px;
+}
