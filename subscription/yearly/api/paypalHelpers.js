@@ -89,27 +89,3 @@ export const createOrder = async (cart) => {
   }
 };
 
-export const captureOrder = async (orderID) => {
-  try {
-    const accessToken = await generateAccessToken();
-    const url = `${base}/v2/checkout/orders/${orderID}/capture`;
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to capture order: ${errorText}`);
-    }
-
-    return handleResponse(response);
-  } catch (error) {
-    console.error("Failed to capture order:", error);
-    throw error;
-  }
-};
