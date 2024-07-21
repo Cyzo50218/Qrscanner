@@ -66,7 +66,6 @@ function initPayPalButtons() {
       });
     },
     onApprove(data, actions) {
-    onApprove(data, actions) {
   console.log("Order approved:", data);
   return fetch(`/subscription/yearly/api/orders/${data.orderID}/capture`, {
     method: "POST",
