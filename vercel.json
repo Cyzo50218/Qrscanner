@@ -2,7 +2,10 @@
   "builds": [
     { "src": "subscription/yearly/api/orders.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" },
-    { "src": "client/**", "use": "@vercel/static" },
+    { "src": "subscription/weekly/api/orders.js", "use": "@vercel/node" }, 
+    { "src": "subscription/weekly/api/captureOrder.js", "use": "@vercel/node" },
+    { "src": "client/subscription/yearly/checkout/**", "use": "@vercel/static" },
+    { "src": "client/subscription/weekly/checkout/**", "use": "@vercel/static" },
     { "src": "index.html", "use": "@vercel/static" }
   ],
   "routes": [
@@ -27,12 +30,39 @@
       }
     },
     {
-      "src": "/client/(.*)",
-      "dest": "/client/$1",
+  "src": "/subscription/weekly/api/orders",
+  "dest": "/subscription/weekly/api/orders.js",
+  "methods": ["GET", "POST", "OPTIONS"],
+  "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+  }
+},
+{
+  "src": "/subscription/weekly/api/orders/(.*)/capture",
+  "dest": "/subscription/weekly/api/captureOrder.js",
+  "methods": ["POST", "OPTIONS"],
+  "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+  }
+},
+    {
+      "src": "/client/subscription/yearly/checkout/(.*)",
+      "dest": "/client/subscription/yearly/checkout/$1",
       "headers": {
         "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.paypal.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.paypalobjects.com data:; frame-src https://www.paypal.com https://www.sandbox.paypal.com; connect-src 'self' https://www.paypal.com https://www.sandbox.paypal.com;"
       }
     },
+    {
+  "src": "/client/subscription/weekly/checkout/(.*)",
+  "dest": "/client/subscription/weekly/checkout/$1",
+  "headers": {
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.paypal.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.paypalobjects.com data:; frame-src https://www.paypal.com https://www.sandbox.paypal.com; connect-src 'self' https://www.paypal.com https://www.sandbox.paypal.com;"
+  }
+},
     {
       "src": "/(.*)",
       "dest": "/index.html"
