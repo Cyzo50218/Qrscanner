@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 
 // Handle OPTIONS requests
-app.options("/subscription/yearly/api/orders/(?<orderID>[^/]+)/capture", (req, res) => {
+app.options("/subscription/yearly/api/orders/:orderID/capture", (req, res) => {
   res.status(200).end();
 });
 
