@@ -6,9 +6,6 @@ const app = express();
 app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 
-// Log the resolved path
-console.log('Resolved path to paypalHelpers.js:', path.resolve('./paypalHelpers.js'));
-
 // Handle OPTIONS requests
 app.options("/subscription/yearly/api/orders/(?<orderID>[^/]+)/capture", (req, res) => {
   res.status(200).end();
