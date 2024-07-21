@@ -11,11 +11,11 @@ app.use(cors()); // Enable CORS for all routes
 console.log('Resolved path to paypalHelpers.js:', path.resolve('./paypalHelpers.js'));
 
 // Handle OPTIONS requests
-app.options("/subscription/yearly/api/orders/:orderID/capture", (req, res) => {
+app.options("/subscription/yearly/api/orders", (req, res) => {
   res.status(200).end();
 });
 
-app.post("/subscription/yearly/api/orders/:orderID/capture", async (req, res) => {
+app.post("/subscription/yearly/api/orders", async (req, res) => {
   try {
     const { orderID } = req.params;
     console.log(`Capturing order with ID: ${orderID}`);
@@ -33,7 +33,7 @@ app.post("/subscription/yearly/api/orders/:orderID/capture", async (req, res) =>
 });
 
 // Handle 405 Method Not Allowed
-app.use("/subscription/yearly/api/orders/:orderID/capture", (req, res) => {
+app.use("/subscription/yearly/api/orders", (req, res) => {
   res.status(405).send('Method Not Allowed');
 });
 
