@@ -17,7 +17,7 @@
       }
     },
     { 
-      "src": "/subscription/yearly/api/orders/:orderID/capture", 
+      "src": "/subscription/yearly/api/orders/(?<orderID>[^/]+)/capture", 
       "dest": "/subscription/yearly/api/captureOrder.js",
       "methods": ["POST", "OPTIONS"],
       "headers": {
