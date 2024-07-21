@@ -6,8 +6,26 @@
     { "src": "index.html", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/subscription/yearly/api/orders", "dest": "/subscription/yearly/api/orders.js" },
-    { "src": "/subscription/yearly/api/orders/:orderID/capture", "dest": "/subscription/yearly/api/captureOrder.js" },
+    { 
+      "src": "/subscription/yearly/api/orders", 
+      "dest": "/subscription/yearly/api/orders.js",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+      }
+    },
+    { 
+      "src": "/subscription/yearly/api/orders/:orderID/capture", 
+      "dest": "/subscription/yearly/api/captureOrder.js",
+      "methods": ["POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+      }
+    },
     { 
       "src": "/client/(.*)", 
       "dest": "/client/$1",
@@ -22,4 +40,4 @@
     { "src": "/client", "dest": "/client/index.html" },
     { "src": "/((?!api/)(?!client/).*)", "dest": "/index.html" }
   ]
-  }
+}
