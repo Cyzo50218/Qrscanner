@@ -25,6 +25,14 @@ function initPayPalButtons() {
     return;
   }
 
+  function sendPurchaseSignalToAndroid(transactionId, status) {
+    if (window.Android && typeof window.Android.onPurchaseComplete === "function") {
+        window.Android.onPurchaseComplete(transactionId, status);
+    } else {
+        console.log("Android interface not available");
+    }
+  }
+
   console.log("Initializing PayPal Buttons...");
 
   paypal.Buttons({
@@ -58,31 +66,41 @@ function initPayPalButtons() {
       });
     },
     onApprove(data, actions) {
-      console.log("Order approved:", data);
-      return fetch(`/subscription/yearly/api/orders/${data.orderID}/capture`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      })
-      .then(response => response.json())
-      .then(orderData => {
-        console.log("Order captured:", orderData);
-        const errorDetail = orderData?.details?.[0];
-        if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-          return actions.restart();
-        } else if (errorDetail) {
-          throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
-        } else if (!orderData.purchase_units) {
-          throw new Error(JSON.stringify(orderData));
-        } else {
-          const transaction = orderData?.purchase_units?.[0]?.payments?.captures?.[0] || orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
-          document.getElementById('result-message').innerHTML = `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`;
-          console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
-        }
-      })
-      .catch(error => {
-        console.error("Error capturing order:", error);
-        document.getElementById('result-message').innerHTML = `Sorry, your transaction could not be processed...<br><br>${error.message}`;
-      });
+    onApprove(data, actions) {
+  console.log("Order approved:", data);
+  return fetch(`/subscription/yearly/api/orders/${data.orderID}/capture`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  })
+  .then(response => response.json())
+  .then(orderData => {
+    console.log("Order captured:", orderData);
+    const errorDetail = orderData?.details?.[0];
+    if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+      return actions.restart();
+    } else if (errorDetail) {
+      throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
+    } else if (!orderData.purchase_units) {
+      throw new Error(JSON.stringify(orderData));
+    } else {
+      const transaction = orderData?.purchase_units?.[0]?.payments?.captures?.[0] || orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
+      document.getElementById('result-message').innerHTML = `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`;
+      console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
+      
+      console.log("Purchase successful!", transaction);
+      
+      // Send signal to Android
+      sendPurchaseSignalToAndroid(transaction.id, transaction.status);
+    }
+  })
+  .catch(error => {
+    console.error("Error capturing order:", error);
+    document.getElementById('result-message').innerHTML = `Sorry, your transaction could not be processed...<br><br>${error.message}`;
+    
+    // Send error signal to Android
+    sendPurchaseSignalToAndroid("ERROR", error.message);
+  });
+
     },
     onError: (err) => {
       console.error("PayPal Buttons Error:", err);
