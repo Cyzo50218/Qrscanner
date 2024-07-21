@@ -47,7 +47,7 @@ function initPayPalButtons() {
       return fetch("/subscription/weekly/api/orders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cart: [{ id: "yearlyaccess4772", quantity: "1" }] }),
+          body: JSON.stringify({ cart: [{ id: "weeklyaccess7", quantity: "1" }] }),
         })
         .then(response => response.json())
         .then(orderData => {
