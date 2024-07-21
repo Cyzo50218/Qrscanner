@@ -8,7 +8,7 @@ app.use(express.json());
 // Log the resolved path for debugging
 console.log('Resolved path to paypalHelpers.js:', path.resolve('./paypalHelpers.js'));
 
-app.post("/subscription/yearly/api/orders", async (req, res) => {
+app.post("/subscription/yearly/api/orders/", async (req, res) => {
   try {
     const { cart } = req.body;
     const { jsonResponse, httpStatusCode } = await createOrder(cart);
