@@ -64,13 +64,13 @@ async function trackVisit() {
 }
 
 async function notifyDatabase(uuid) {
-  const dbRef = ref(realtimeDb, `generatedInformations/${uuid}/information`);
+  const dbRef = ref(realtimeDb, `generatedInformations/${uuid}`);
   try {
     const snapshot = await get(dbRef);
     if (snapshot.exists()) {
-      const info = snapshot.val();
+      const info = snapshot.val().information; // Access the 'information' field inside the 'uuid' node
       console.log('Information:', info);
-handleRedirection(info);
+      handleRedirection(info);
     } else {
       console.log('No data available');
     }
@@ -78,6 +78,7 @@ handleRedirection(info);
     console.error('Error getting data:', error);
   }
 }
+
 
 // Function to increment scan count
 async function incrementScanCount(uuid) {
