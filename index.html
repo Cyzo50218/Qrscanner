@@ -68,11 +68,12 @@ async function notifyDatabase(uuid) {
   const dbRef = ref(realtimeDb, `generatedInformations/${uuid}`);
   try {
     const snapshot = await get(dbRef);
-    console.log('Snapshot:', snapshot.val().information); // Log the entire snapshot
+    const data = snapshot.val();
+    console.log('Snapshot:', data); // Log the entire snapshot
 
     if (snapshot.exists()) {
-      const info = snapshot.val().information; // Access the 'information' field inside the 'uuid' node
-      if (info) {
+      if (data && data.information) {
+        const info = data.information; // Access the 'information' field inside the 'uuid' node
         console.log('Information:', info);
         handleRedirection(info);
       } else {
@@ -85,6 +86,7 @@ async function notifyDatabase(uuid) {
     console.error('Error getting data:', error);
   }
 }
+
 
 
 
