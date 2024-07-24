@@ -68,7 +68,7 @@
       "dest": "/index.html"
     },
      {
-      "src": "/base/scan(.*)",
+      "src": "/base/scan(:path*)",
       "dest": "/index.html"
     }
   ]
