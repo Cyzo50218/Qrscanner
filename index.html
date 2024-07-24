@@ -35,7 +35,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+const realtimeDb = getDatabase(app); // Initialize the Realtime Database
 // Function to get URL parameters
 function getUrlParams() {
   const path = window.location.pathname;
