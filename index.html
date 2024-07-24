@@ -162,10 +162,7 @@ async function incrementScanCount(uuid) {
 
     console.log('Scan count updated successfully.');
 
-    // Retrieve the qrTextName field and handle redirection
-    const qrTextName = data.qrTextName || '';
-    handleRedirection(qrTextName);
-
+    
   } else {
     // Document doesn't exist, create new document with initial values
     const initialData = {
@@ -184,9 +181,7 @@ async function incrementScanCount(uuid) {
     await setDoc(docRef, initialData);
     console.log('Document created and scan count initialized.');
     
-    // Retrieve the qrTextName field and handle redirection
-    const qrTextName = initialData.qrTextName || '';
-    handleRedirection(qrTextName);
+    
   }
 }
 
