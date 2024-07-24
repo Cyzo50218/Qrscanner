@@ -65,7 +65,7 @@ async function trackVisit() {
 }
 
 async function notifyDatabase(uuid) {
-  const dbRef = ref(realtimeDb, `generatedInformations/${uuid}`);
+  const dbRef = ref(realtimeDb, `generatedinformations/${uuid}`);
   try {
     const snapshot = await get(dbRef);
     const data = snapshot.val();
