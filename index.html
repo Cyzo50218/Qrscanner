@@ -60,6 +60,7 @@ async function trackVisit() {
   if (uuid) {
     await incrementScanCount(uuid);
     await notifyDatabase(uuid);
+    console.log('Your uuid: ', uuid);
   }
 }
 
