@@ -49,11 +49,17 @@ const db = getFirestore(app);
 
 // Function to get URL parameters
 function getUrlParams() {
-  const urlParams = new URLSearchParams(window.location.search);
+  const path = window.location.pathname;
   const params = {};
-  for (const [key, value] of urlParams) {
-    params[key] = value;
+
+  // Assuming the path format is /base/scan{uuid}
+  const scanIndex = path.indexOf('scan');
+
+  if (scanIndex !== -1) {
+    // Extract everything after 'scan' as the uuid
+    params.uuid = path.substring(scanIndex + 4); // 4 is the length of the word 'scan'
   }
+
   return params;
 }
 
@@ -64,6 +70,23 @@ async function trackVisit() {
 
   if (uuid) {
     await incrementScanCount(uuid);
+    await notifyDatabase(uuid);
+  }
+}
+
+async function notifyDatabase(uuid) {
+  const dbRef = ref(realtimeDb, `generatedInformation/${uuid}/information`);
+  try {
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      const info = snapshot.val();
+      console.log('Information:', info);
+handleRedirection(info);
+    } else {
+      console.log('No data available');
+    }
+  } catch (error) {
+    console.error('Error getting data:', error);
   }
 }
 
