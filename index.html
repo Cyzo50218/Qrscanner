@@ -68,7 +68,7 @@ async function notifyDatabase(uuid) {
   const dbRef = ref(realtimeDb, `generatedInformations/${uuid}`);
   try {
     const snapshot = await get(dbRef);
-    console.log('Snapshot:', snapshot.val()); // Log the entire snapshot
+    console.log('Snapshot:', snapshot.val().information); // Log the entire snapshot
 
     if (snapshot.exists()) {
       const info = snapshot.val().information; // Access the 'information' field inside the 'uuid' node
