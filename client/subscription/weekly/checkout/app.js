@@ -10,12 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadPayPalScript() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    const environment = process.env.NODE_ENV; // 'development' or 'production'
-    let scriptSrc = "https://www.paypal.com/sdk/js?client-id=ARIFr8TpW3U0MgYuDHcXpodVqMA3q800Iy1t8lIzHrD1YmleqHu4TC4J3h2801uRWAInenWsMQSPgQgE&currency=USD&components=buttons";
-
-    if (environment === 'development') {
-      scriptSrc += "&buyer-country=US";
-    }
+      let scriptSrc = "https://www.paypal.com/sdk/js?client-id=ARIFr8TpW3U0MgYuDHcXpodVqMA3q800Iy1t8lIzHrD1YmleqHu4TC4J3h2801uRWAInenWsMQSPgQgE&currency=USD&components=buttons";
 
     script.src = scriptSrc;
     script.async = true;
@@ -24,6 +19,7 @@ function loadPayPalScript() {
     document.body.appendChild(script);
   });
 }
+
 
 
 function initPayPalButtons() {
