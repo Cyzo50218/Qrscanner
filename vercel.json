@@ -32,7 +32,7 @@
     {
       "src": "/subscription/weekly/api/orders",
       "dest": "/subscription/weekly/api/orders.js",
-      "methods": ["GET", "POST, OPTIONS"],
+      "methods": ["GET", "POST", "OPTIONS"],
       "headers": {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -42,7 +42,7 @@
     {
       "src": "/subscription/weekly/api/orders/(.*)/capture",
       "dest": "/subscription/weekly/api/captureOrder.js",
-      "methods": ["POST, OPTIONS"],
+      "methods": ["POST", "OPTIONS"],
       "headers": {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -52,30 +52,30 @@
     {
       "src": "/client/subscription/yearly/checkout/(.*)",
       "dest": "/client/subscription/yearly/checkout/$1",
-"headers": {
-  "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
-}
+      "headers": {
+        "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
+      }
     },
     {
-      "src": "/client/subscription/yearly/checkout/(.*)",
+      "src": "/client/subscription/yearly/checkout/app.js",
       "dest": "/client/subscription/yearly/checkout/app.js",
-"headers": {
-  "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
-}
+      "headers": {
+        "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
+      }
     },
     {
       "src": "/client/subscription/weekly/checkout/(.*)",
       "dest": "/client/subscription/weekly/checkout/$1",
-"headers": {
-  "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
-}
+      "headers": {
+        "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
+      }
     },
     {
-      "src": "/client/subscription/weekly/checkout/(.*)",
+      "src": "/client/subscription/weekly/checkout/app.js",
       "dest": "/client/subscription/weekly/checkout/app.js",
-"headers": {
-  "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
-}
+      "headers": {
+        "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
+      }
     },
     {
       "src": "/(.*)",
