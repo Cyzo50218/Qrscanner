@@ -52,30 +52,30 @@
     {
       "src": "/client/subscription/yearly/checkout/(.*)",
       "dest": "/client/subscription/yearly/checkout/$1",
-      "headers": {
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.paypal.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.paypalobjects.com https://t.paypal.com data:; frame-src https://www.paypal.com https://www.sandbox.paypal.com; connect-src 'self' https://www.paypal.com https://www.sandbox.paypal.com;"
-      }
+"headers": {
+  "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
+}
     },
     {
       "src": "/client/subscription/yearly/checkout/(.*)",
       "dest": "/client/subscription/yearly/checkout/app.js",
-      "headers": {
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.paypal.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.paypalobjects.com https://t.paypal.com data:; frame-src https://www.paypal.com https://www.sandbox.paypal.com; connect-src 'self' https://www.paypal.com https://www.sandbox.paypal.com;"
-      }
+"headers": {
+  "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
+}
     },
     {
       "src": "/client/subscription/weekly/checkout/(.*)",
       "dest": "/client/subscription/weekly/checkout/$1",
-      "headers": {
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.paypal.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.paypalobjects.com https://t.paypal.com data:; frame-src https://www.paypal.com https://www.sandbox.paypal.com; connect-src 'self' https://www.paypal.com https://www.sandbox.paypal.com;"
-      }
+"headers": {
+  "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
+}
     },
     {
       "src": "/client/subscription/weekly/checkout/(.*)",
       "dest": "/client/subscription/weekly/checkout/app.js",
-      "headers": {
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.paypal.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://www.paypalobjects.com https://t.paypal.com data:; frame-src https://www.paypal.com https://www.sandbox.paypal.com; connect-src 'self' https://www.paypal.com https://www.sandbox.paypal.com;"
-      }
+"headers": {
+  "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
+}
     },
     {
       "src": "/(.*)",
@@ -86,4 +86,4 @@
       "dest": "/index.html"
     }
   ]
-      }
+}
