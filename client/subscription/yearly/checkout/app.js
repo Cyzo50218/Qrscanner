@@ -10,13 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadPayPalScript() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = "https://www.paypal.com/sdk/js?client-id=ARIFr8TpW3U0MgYuDHcXpodVqMA3q800Iy1t8lIzHrD1YmleqHu4TC4J3h2801uRWAInenWsMQSPgQgE&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo";
+    const environment = process.env.NODE_ENV; // 'development' or 'production'
+    let scriptSrc = "https://www.paypal.com/sdk/js?client-id=ARIFr8TpW3U0MgYuDHcXpodVqMA3q800Iy1t8lIzHrD1YmleqHu4TC4J3h2801uRWAInenWsMQSPgQgE&currency=USD&components=buttons";
+
+    if (environment === 'development') {
+      scriptSrc += "&buyer-country=US";
+    }
+
+    script.src = scriptSrc;
     script.async = true;
     script.onload = resolve;
     script.onerror = () => reject(new Error('Failed to load PayPal SDK'));
     document.body.appendChild(script);
   });
 }
+
 
 function initPayPalButtons() {
   if (typeof paypal === 'undefined') {
