@@ -2,6 +2,7 @@
   "builds": [
     { "src": "subscription/yearly/api/orders.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" },
+        { "src": "subscription/yearly/api/substatus.js", "use": "@vercel/node" }, { "src": "subscription/weekly/api/substatus.js", "use": "@vercel/node" },
     { "src": "subscription/weekly/api/orders.js", "use": "@vercel/node" },
     { "src": "subscription/weekly/api/captureOrder.js", "use": "@vercel/node" },
     { "src": "client/subscription/yearly/checkout/**", "use": "@vercel/static" },
@@ -84,6 +85,14 @@
     {
       "src": "/base/scan(:path*)",
       "dest": "/index.html"
+    },
+    {
+      "src": "/subscription/yearly/api/status",
+      "dest": "/subscription/yearly/api/substatus.js"
+    },
+    {
+      "src": "/subscription/weekly/api/status",
+      "dest": "/subscription/weekly/api/substatus.js"
     }
   ]
-}
+    }
