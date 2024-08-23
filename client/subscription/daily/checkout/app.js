@@ -36,6 +36,25 @@ function initPayPalButtons() {
       console.log("Android interface not available");
     }
   }
+  
+  function updateSubstatus(transactionId, status,) {
+    console.log("Received substatus:", transactionId, status);
+    // Handle the substatus here (e.g., update UI, send data to server, etc.)
+}
+function updateSubstatus(transactionId, subscriptionType,userName,email
+) {
+  fetch("/path/to/substatus.js", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userName, email, subscriptionType,transactionId})
+    }).then(response => response.json())
+    .then(data => {
+      console.log("Data sent to substatus.js:", data);
+    }).catch(error => {
+      console.error("Failed to send data to substatus.js:", error);
+    });
+}
+
 
   console.log("Initializing PayPal Buttons...");
 
@@ -113,4 +132,4 @@ function initPayPalButtons() {
     console.error('Failed to render PayPal Buttons:', error);
     document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
   });
-  }
+}
