@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadPayPalScript() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    let scriptSrc = "https://www.paypal.com/sdk/js?client-id=ARIFr8TpW3U0MgYuDHcXpodVqMA3q800Iy1t8lIzHrD1YmleqHu4TC4J3h2801uRWAInenWsMQSPgQgE&currency=USD&components=buttons";
+    let scriptSrc = "https://www.paypal.com/sdk/js?client-id=AdchnSRplQeuN4_MaZwIFzhl4iQ_nFP7ARTZnfJ3E7H&currency=USD&components=buttons";
 
     script.src = scriptSrc;
     script.async = true;
@@ -19,8 +19,6 @@ function loadPayPalScript() {
     document.body.appendChild(script);
   });
 }
-
-
 
 function initPayPalButtons() {
   if (typeof paypal === 'undefined') {
@@ -36,25 +34,19 @@ function initPayPalButtons() {
       console.log("Android interface not available");
     }
   }
-  
-  function updateSubstatus(transactionId, status,) {
-    console.log("Received substatus:", transactionId, status);
-    // Handle the substatus here (e.g., update UI, send data to server, etc.)
-}
-function updateSubstatus(transactionId, subscriptionType,userName,email
-) {
-  fetch("/path/to/substatus.js", {
+
+  function updateSubstatus(transactionId, subscriptionType, userName, email) {
+    fetch("/subscription/yearly/api/status", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userName, email, subscriptionType,transactionId})
+      body: JSON.stringify({ userName, email, subscriptionType, transactionId })
     }).then(response => response.json())
-    .then(data => {
-      console.log("Data sent to substatus.js:", data);
-    }).catch(error => {
-      console.error("Failed to send data to substatus.js:", error);
-    });
-}
-
+      .then(data => {
+        console.log("Data sent to substatus.js:", data);
+      }).catch(error => {
+        console.error("Failed to send data to substatus.js:", error);
+      });
+  }
 
   console.log("Initializing PayPal Buttons...");
 
@@ -63,66 +55,67 @@ function updateSubstatus(transactionId, subscriptionType,userName,email
       shape: "pill",
       layout: "vertical",
       color: "blue",
-      label: "testPayment",
+      label: "subscribe", // Use "subscribe" for subscription button
     },
     createOrder() {
-      console.log("Creating order...");
-      return fetch("/subscription/daily/api/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cart: [{ id: "purchasetest", quantity: "1" }] }),
-        })
-        .then(response => response.json())
-        .then(orderData => {
-          console.log("Order created:", orderData);
-          if (orderData.id) {
-            return orderData.id;
-          }
-          const errorDetail = orderData?.details?.[0];
-          const errorMessage = errorDetail ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})` : JSON.stringify(orderData);
-          throw new Error(errorMessage);
-        })
-        .catch(error => {
-          console.error("Error creating order:", error);
-          document.getElementById('result-message').innerHTML = `Could not initiate PayPal Checkout...<br><br>${error.message}`;
-          throw error;
-        });
+      console.log("Creating subscription...");
+
+      return fetch("/subscription/yearly/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      })
+      .then(response => response.json())
+      .then(subscriptionData => {
+        console.log("Subscription created:", subscriptionData);
+        if (subscriptionData.id) {
+          return subscriptionData.id;
+        }
+        const errorDetail = subscriptionData?.details?.[0];
+        const errorMessage = errorDetail ? `${errorDetail.issue} ${errorDetail.description} (${subscriptionData.debug_id})` : JSON.stringify(subscriptionData);
+        throw new Error(errorMessage);
+      })
+      .catch(error => {
+        console.error("Error creating subscription:", error);
+        document.getElementById('result-message').innerHTML = `Could not initiate PayPal Checkout...<br><br>${error.message}`;
+        throw error;
+      });
     },
     onApprove(data, actions) {
-      console.log("Order approved:", data);
-      return fetch(`/subscription/daily/api/orders/${data.orderID}/capture`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        })
-        .then(response => response.json())
-        .then(orderData => {
-          console.log("Order captured:", orderData);
-          const errorDetail = orderData?.details?.[0];
-          if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-            return actions.restart();
-          } else if (errorDetail) {
-            throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
-          } else if (!orderData.purchase_units) {
-            throw new Error(JSON.stringify(orderData));
-          } else {
-            const transaction = orderData?.purchase_units?.[0]?.payments?.captures?.[0] || orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
-            document.getElementById('result-message').innerHTML = `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`;
-            console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
+      console.log("Subscription approved:", data);
 
-            console.log("Purchase successful!", transaction);
+      return fetch(`/subscription/yearly/api/orders/${data.subscriptionID}/capture`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      })
+      .then(response => response.json())
+      .then(subscriptionData => {
+        console.log("Subscription executed:", subscriptionData);
+        const errorDetail = subscriptionData?.details?.[0];
+        if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+          return actions.restart();
+        } else if (errorDetail) {
+          throw new Error(`${errorDetail.description} (${subscriptionData.debug_id})`);
+        } else if (!subscriptionData.status) {
+          throw new Error(JSON.stringify(subscriptionData));
+        } else {
+          const transaction = subscriptionData?.status;
+          document.getElementById('result-message').innerHTML = `Subscription ${transaction}: ${data.subscriptionID}<br><br>See console for all available details`;
+          console.log("Subscription result", subscriptionData, JSON.stringify(subscriptionData, null, 2));
 
-            // Send signal to Android
-            sendPurchaseSignalToAndroid(transaction.id, transaction.status);
-          }
-        })
-        .catch(error => {
-          console.error("Error capturing order:", error);
-          document.getElementById('result-message').innerHTML = `Sorry, your transaction could not be processed...<br><br>${error.message}`;
+          console.log("Subscription successful!", transaction);
 
-          // Send error signal to Android
-          sendPurchaseSignalToAndroid("ERROR", error.message);
-        });
+          // Send signal to Android
+          sendPurchaseSignalToAndroid(data.subscriptionID, transaction);
+          updateSubstatus(data.subscriptionID, "yearly", "userName", "userEmail"); // Update with actual user info
+        }
+      })
+      .catch(error => {
+        console.error("Error executing subscription:", error);
+        document.getElementById('result-message').innerHTML = `Sorry, your subscription could not be processed...<br><br>${error.message}`;
 
+        // Send error signal to Android
+        sendPurchaseSignalToAndroid("ERROR", error.message);
+      });
     },
     onError: (err) => {
       console.error("PayPal Buttons Error:", err);
