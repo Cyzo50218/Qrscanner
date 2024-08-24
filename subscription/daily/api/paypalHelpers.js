@@ -89,7 +89,7 @@ export const createOrder = async (cart) => {
       purchase_units: [
         {
           amount: {
-            currency_code: "PH",
+            currency_code: "PHP",
             value: "10", // Example static value
           },
         },
