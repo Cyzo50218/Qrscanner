@@ -1,3 +1,4 @@
+
 import "dotenv/config";
 
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
@@ -53,47 +54,25 @@ export const handleResponse = async (response) => {
     throw new Error(`Failed to parse response: ${errorMessage}`);
   }
 };
-export const captureOrder = async (orderID) => {
+
+// Create a subscription
+export const createOrder = async () => {
   try {
     const accessToken = await generateAccessToken();
-    const url = `${base}/v2/checkout/orders/${orderID}/capture`;
-
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to capture order: ${errorText}`);
-    }
-
-    return handleResponse(response);
-  } catch (error) {
-    console.error("Failed to capture order:", error);
-    throw error;
-  }
-};
-
-
-export const createOrder = async (cart) => {
-  try {
-    const accessToken = await generateAccessToken();
-    const url = `${base}/v2/checkout/orders`;
+    const url = `${base}/v1/billing/subscriptions`;
 
     const payload = {
-      intent: "CAPTURE",
-      purchase_units: [
-        {
-          amount: {
-            currency_code: "PHP",
-            value: "10", // Example static value
-          },
-        },
-      ],
+      plan_id: "yearlyaccess1", // Replace with your PayPal Plan ID
+      start_time: new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000).toISOString(), // Start after 3 days
+      quantity: 1,
+      application_context: {
+        brand_name: "Yearly access QRCode Scanner and generator",
+        locale: "en-US",
+        shipping_preference: "NO_SHIPPING",
+        user_action: "SUBSCRIBE_NOW",
+        return_url: "qrscannerpro://paypalpay",
+        cancel_url: "https://feedsbeta.vercel.app/client/subscription/daily/checkout/"
+      }
     };
 
     const response = await fetch(url, {
@@ -107,13 +86,14 @@ export const createOrder = async (cart) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Failed to create order: ${errorText}`);
+      throw new Error(`Failed to create subscription: ${errorText}`);
     }
 
     return handleResponse(response);
   } catch (error) {
-    console.error("Failed to create order:", error);
+    console.error("Failed to create subscription:", error);
     throw error;
   }
 };
-    
+
+
