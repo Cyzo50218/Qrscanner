@@ -141,7 +141,7 @@
 {
   "src": "/subscription/create-plan",
   "dest": "/subscription/daily/api/planPayPal.js",
-  "methods": ["POST"],
+  "methods": ["POST", "OPTIONS"],
   "headers": {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
