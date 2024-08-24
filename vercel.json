@@ -140,7 +140,7 @@
 },
 {
   "src": "/subscription/create-plan",
-  "dest": "/subscription/dailu/api/planPayPal.js",
+  "dest": "/subscription/daily/api/planPayPal.js",
   "methods": ["POST"],
   "headers": {
     "Access-Control-Allow-Origin": "*",
