@@ -1,6 +1,7 @@
 {
   "builds": [
     { "src": "subscription/yearly/api/orders.js", "use": "@vercel/node" },
+    { "src": "subscription/daily/api/planPayPal.js", "use": "@vercel/node" }, { "src": "subscription/daily/api/paypalHelpers.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/substatus.js", "use": "@vercel/node" },
     { "src": "subscription/weekly/api/substatus.js", "use": "@vercel/node" },
@@ -46,24 +47,24 @@
       }
     },
     {
-  "src": "/subscription/daily/api/orders/(.*)/capture",
-  "dest": "/subscription/daily/api/captureOrder.js",
-  "methods": ["POST", "OPTIONS"],
-  "headers": {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
-  }
+      "src": "/subscription/daily/api/orders/(.*)/capture",
+      "dest": "/subscription/daily/api/captureOrder.js",
+      "methods": ["POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+      }
 },
-{
-  "src": "/subscription/daily/api/orders",
-  "dest": "/subscription/daily/api/orders.js",
-  "methods": ["GET", "POST", "OPTIONS"],
-  "headers": {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
-  }
+    {
+      "src": "/subscription/daily/api/orders",
+      "dest": "/subscription/daily/api/orders.js",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+      }
 },
     {
       "src": "/subscription/weekly/api/orders/(.*)/capture",
@@ -103,7 +104,7 @@
         "Content-Security-Policy": "default-src *; script-src * 'unsafe-inline'; style-src * 'unsafe-inline'; img-src * data:; frame-src *; connect-src *;"
       }
     },
-     {
+    {
       "src": "/client/subscription/daily/checkout/(.*)",
       "dest": "/client/subscription/daily/checkout/$1",
       "headers": {
@@ -134,8 +135,19 @@
       "dest": "/subscription/weekly/api/substatus.js"
     },
     {
-  "src": "/subscription/daily/api/status",
-  "dest": "/subscription/daily/api/substatus.js"
+      "src": "/subscription/daily/api/status",
+      "dest": "/subscription/daily/api/substatus.js"
+},
+{
+  "src": "/subscription/create-plan",
+  "dest": "/subscription/dailu/api/planPayPal.js",
+  "methods": ["POST"],
+  "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+  }
 }
   ]
 }
+
