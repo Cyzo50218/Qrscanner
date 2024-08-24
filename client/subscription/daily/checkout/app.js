@@ -10,8 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadPayPalScript() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = "https://www.paypal.com/sdk/js?client-id=AdchnSRplQeuN4_MaZwIFzhl4iQ_nFP7ARTZnfJ3E7H-_rPbnLpsbKgdLf098LVoSFipi-q9Y3NE5N3C-&currency=USD&vault=true&components=buttons";
-    script.async = true;
+   
+   let scriptSrc = "https://www.paypal.com/sdk/js?client-id=AdchnSRplQeuN4_MaZwIFzhl4iQ_nFP7ARTZnfJ3E7H-_rPbnLpsbKgdLf098LVoSFipi-q9Y3NE5N3C&currency=USD&vault=true&components=buttons";
+
+script.src = scriptSrc;
+script.async = true;
     script.onload = resolve;
     script.onerror = () => reject(new Error('Failed to load PayPal SDK'));
     document.body.appendChild(script);
