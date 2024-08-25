@@ -1,7 +1,7 @@
 {
   "builds": [
     { "src": "subscription/yearly/api/orders.js", "use": "@vercel/node" },
-    { "src": "subscription/daily/api/planPayPal.js", "use": "@vercel/node" }, { "src": "subscription/daily/api/paypalHelpers.js", "use": "@vercel/node" },
+    { "src": "subscription/daily/api/create-plan.js", "use": "@vercel/node" }, { "src": "subscription/daily/api/paypalHelpers.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/substatus.js", "use": "@vercel/node" },
     { "src": "subscription/weekly/api/substatus.js", "use": "@vercel/node" },
@@ -140,7 +140,7 @@
 },
 {
   "src": "/subscription/create-plan",
-  "dest": "/subscription/daily/api/planPayPal.js",
+  "dest": "/subscription/daily/api/create-plan.js",
   "methods": ["POST", "OPTIONS"],
   "headers": {
     "Access-Control-Allow-Origin": "*",
