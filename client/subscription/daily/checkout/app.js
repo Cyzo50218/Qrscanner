@@ -35,7 +35,8 @@ function initPayPalButtons() {
   paypal.Buttons({
     createSubscription(data, actions) {
       return fetch("/subscription/create-plan", {
-        method: "POST"
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
       })
       .then(response => {
         if (!response.ok) {
