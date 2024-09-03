@@ -1,10 +1,7 @@
 import "dotenv/config";
 
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
-
-console.log('PayPal Client ID:', PAYPAL_CLIENT_ID); // Check if this logs the expected value
-console.log('PayPal Client Secret:', PAYPAL_CLIENT_SECRET); // Check if this logs the expected value
-const base = "https://api-m.paypal.com";
+const base = "https://api-m.sandbox.paypal.com";
 
 const fetch = (await import('node-fetch')).default;
 
@@ -116,4 +113,4 @@ export const createOrder = async (cart) => {
     throw error;
   }
 };
-    
+

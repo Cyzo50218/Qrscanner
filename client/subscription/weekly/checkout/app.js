@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadPayPalScript() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-      let scriptSrc = "https://www.paypal.com/sdk/js?client-id=ARIFr8TpW3U0MgYuDHcXpodVqMA3q800Iy1t8lIzHrD1YmleqHu4TC4J3h2801uRWAInenWsMQSPgQgE&currency=USD&components=buttons";
-
+      let scriptSrc = "https://www.paypal.com/sdk/js?client-id=AdchnSRplQeuN4_MaZwIFzhl4iQ_nFP7ARTZnfJ3E7H-_rPbnLpsbKgdLf098LVoSFipi-q9Y3NE5N3C&currency=USD&components=buttons";
+      
     script.src = scriptSrc;
     script.async = true;
     script.onload = resolve;
@@ -42,9 +42,9 @@ function initPayPalButtons() {
   paypal.Buttons({
     style: {
       shape: "pill",
-      layout: "vertical",
-      color: "blue",
-      label: "subscribe",
+  layout: "vertical",
+  color: "blue",
+  label: "subscribe",
     },
     createOrder() {
       console.log("Creating order...");
