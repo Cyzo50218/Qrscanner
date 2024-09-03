@@ -27,6 +27,38 @@ function initPayPalButtons() {
     document.getElementById('result-message').textContent = 'PayPal SDK failed to load. Please try again later.';
     return;
   }
+  
+  function updateSubstatus(transactionId, stats, name, email) {
+    // Create the data object to send to the server
+    const data = {
+        userName: name,
+        email: email,
+        subscriptionType: stats,
+        transactionId: transactionId
+    };
+
+    // Send the data to the server
+    fetch('/subscription/yearly/api/status', {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        console.log('Success:', responseData);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 
   function sendPurchaseSignalToAndroid(transactionId, status) {
     if (window.Android && typeof window.Android.onPurchaseComplete === "function") {
