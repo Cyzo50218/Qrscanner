@@ -1,6 +1,7 @@
 {
   "builds": [
     { "src": "subscription/yearly/api/orders.js", "use": "@vercel/node" },
+    { "src": "subscription/daily/api/create-plan.js", "use": "@vercel/node" },
     { "src": "subscription/daily/api/create-plan.js", "use": "@vercel/node" }, { "src": "subscription/daily/api/paypalHelpers.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/captureOrder.js", "use": "@vercel/node" },
     { "src": "subscription/yearly/api/substatus.js", "use": "@vercel/node" },
