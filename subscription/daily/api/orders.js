@@ -1,36 +1,25 @@
 import express from 'express';
 import { createSubscription } from './paypalHelpers.js';
-import cors from 'cors'; // Ensure you have this installed
+import path from 'path';
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // Enable CORS for all routes
 
-// Handle OPTIONS requests
-app.options("/subscription/daily/api/orders", (req, res) => {
-  res.status(200).end();
-});
+// Log the resolved path for debugging
+console.log('Resolved path to paypalHelpers.js:', path.resolve('./paypalHelpers.js'));
 
-// Create a subscription
-app.post("/subscription/daily/api/orders", async (req, res) => {
+app.post("/subscription/daily/api/subscriptions/", async (req, res) => {
   try {
-    console.log("Creating subscription...");
+    const { plan_id } = req.body;
 
-    const { jsonResponse, httpStatusCode } = await createSubscription();
-
-    console.log(`Subscription created successfully: ${JSON.stringify(jsonResponse)}`);
+    // Call PayPal API to create a subscription
+    const { jsonResponse, httpStatusCode } = await createSubscription(plan_id);
 
     res.status(httpStatusCode).json(jsonResponse);
   } catch (error) {
-    console.error("Failed to create subscription:", error.message);
-
-    res.status(500).json({ error: `Failed to create subscription: ${error.message || "Unknown error"}` });
+    console.error("Failed to create subscription:", error);
+    res.status(500).json({ error: error.message || "Failed to create subscription." });
   }
-});
-
-// Handle 405 Method Not Allowed
-app.use((req, res) => {
-  res.status(405).send('Method Not Allowed');
 });
 
 export default app;

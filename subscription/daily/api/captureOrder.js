@@ -1,5 +1,5 @@
 import express from 'express';
-import { captureOrder } from './paypalHelpers.js';
+import { captureSubscription } from './paypalHelpers.js';
 import cors from 'cors'; // Ensure you have this installed
 
 const app = express();
@@ -7,24 +7,24 @@ app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 
 // Handle OPTIONS requests
-app.options("/subscription/daily/api/orders/:orderID/capture", (req, res) => {
+app.options("/subscription/daily/api/subscriptions/:subscriptionID/capture", (req, res) => {
   res.status(200).end();
 });
 
-app.post("/subscription/daily/api/orders/:orderID/capture", async (req, res) => {
+app.post("/subscription/daily/api/subscriptions/:subscriptionID/capture", async (req, res) => {
   try {
-    const { orderID } = req.params;
-    console.log(`Capturing order with ID: ${orderID}`);
+    const { subscriptionID } = req.params;
+    console.log(`Capturing subscription with ID: ${subscriptionID}`);
 
-    const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
+    const { jsonResponse, httpStatusCode } = await captureSubscription(subscriptionID);
 
-    console.log(`Order captured successfully: ${JSON.stringify(jsonResponse)}`);
+    console.log(`Subscription captured successfully: ${JSON.stringify(jsonResponse)}`);
 
     res.status(httpStatusCode).json(jsonResponse);
   } catch (error) {
-    console.error("Failed to capture order:", error.message);
+    console.error("Failed to capture subscription:", error.message);
 
-    res.status(500).json({ error: `Failed to capture order: ${error.message || "Unknown error"}` });
+    res.status(500).json({ error: `Failed to capture subscription: ${error.message || "Unknown error"}` });
   }
 });
 

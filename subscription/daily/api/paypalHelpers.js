@@ -1,16 +1,19 @@
 import "dotenv/config";
-import fetch from 'node-fetch';
 
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 
-const generateAccessToken = async () => {
+const fetch = (await import('node-fetch')).default;
+
+export const generateAccessToken = async () => {
   try {
     if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
       throw new Error("MISSING_API_CREDENTIALS");
     }
 
-    const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString("base64");
+    const auth = Buffer.from(
+      `${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`
+    ).toString("base64");
 
     const response = await fetch(`${base}/v1/oauth2/token`, {
       method: "POST",
@@ -34,7 +37,7 @@ const generateAccessToken = async () => {
   }
 };
 
-const handleResponse = async (response) => {
+export const handleResponse = async (response) => {
   try {
     const jsonResponse = await response.json();
     return {
@@ -48,16 +51,16 @@ const handleResponse = async (response) => {
   }
 };
 
-// Create a subscription plan
-export const createSubscriptionPlan = async () => {
+// Create Subscription Plan with 3-Day Free Trial and Weekly Recurring Charge
+export const createPlan = async () => {
   try {
     const accessToken = await generateAccessToken();
     const url = `${base}/v1/billing/plans`;
 
     const payload = {
-      product_id: "YOUR_PRODUCT_ID", // Replace with your product ID
+      product_id: "YOUR_PRODUCT_ID",  // Replace this with your actual product ID
       name: "Weekly Subscription Plan",
-      description: "Weekly subscription plan with a 3-day free trial",
+      description: "Weekly subscription plan with 3-day free trial",
       billing_cycles: [
         {
           frequency: {
@@ -65,28 +68,39 @@ export const createSubscriptionPlan = async () => {
             interval_count: 1
           },
           tenure_type: "REGULAR",
-          sequence: 1,
-          total_cycles: 0,
+          sequence: 2,
+          total_cycles: 0,  // 0 means indefinite billing cycles
           pricing_scheme: {
             fixed_price: {
-              value: "2.30",
+              value: "5.30",
+              currency_code: "USD"
+            }
+          }
+        },
+        {
+          frequency: {
+            interval_unit: "DAY",
+            interval_count: 3
+          },
+          tenure_type: "TRIAL",
+          sequence: 1,
+          total_cycles: 1,
+          pricing_scheme: {
+            fixed_price: {
+              value: "0",
               currency_code: "USD"
             }
           }
         }
       ],
       payment_preferences: {
-        auto_bill_amount: "YES",
+        auto_bill_outstanding: true,
         setup_fee: {
-          value: "0.00",
+          value: "0",
           currency_code: "USD"
         },
         setup_fee_failure_action: "CONTINUE",
         payment_failure_threshold: 3
-      },
-      taxes: {
-        percentage: "0",
-        inclusive: false
       }
     };
 
@@ -104,34 +118,27 @@ export const createSubscriptionPlan = async () => {
       throw new Error(`Failed to create subscription plan: ${errorText}`);
     }
 
-    return handleResponse(response);
+    const planData = await handleResponse(response);
+
+    // Extract the plan ID from the response
+    const planId = planData.jsonResponse.id;
+    console.log(`Plan ID: ${planId}`);
+
+    return planId;  // Return the plan ID for further use
   } catch (error) {
     console.error("Failed to create subscription plan:", error);
     throw error;
   }
 };
 
-// Create a subscription
-export const createSubscription = async (planId, subscriber) => {
+// Create Subscription
+export const createSubscription = async (planId) => {
   try {
     const accessToken = await generateAccessToken();
     const url = `${base}/v1/billing/subscriptions`;
 
     const payload = {
-      plan_id: planId,
-      start_time: new Date().toISOString(),
-      quantity: "1",
-      subscriber,
-      application_context: {
-        brand_name: "Your Company",
-        locale: "en-US",
-        shipping_preference: "NO_SHIPPING",
-        user_action: "SUBSCRIBE_NOW",
-        payment_method: {
-          payer_selected: "PAYPAL",
-          payee_preferred: "IMMEDIATE_PAY"
-        }
-      }
+      plan_id: planId,  // Use the plan ID created by PayPal
     };
 
     const response = await fetch(url, {
@@ -155,11 +162,11 @@ export const createSubscription = async (planId, subscriber) => {
   }
 };
 
-// Capture an order
-export const captureOrder = async (orderID) => {
+// Capture Subscription
+export const captureSubscription = async (subscriptionID) => {
   try {
     const accessToken = await generateAccessToken();
-    const url = `${base}/v2/checkout/orders/${orderID}/capture`;
+    const url = `${base}/v1/billing/subscriptions/${subscriptionID}/capture`;
 
     const response = await fetch(url, {
       headers: {
@@ -171,41 +178,12 @@ export const captureOrder = async (orderID) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Failed to capture order: ${errorText}`);
+      throw new Error(`Failed to capture subscription: ${errorText}`);
     }
 
     return handleResponse(response);
   } catch (error) {
-    console.error("Failed to capture order:", error);
-    throw error;
-  }
-};
-
-// Handle subscription status updates (if needed)
-export const updateSubscriptionStatus = async (subscriptionID, status) => {
-  try {
-    const accessToken = await generateAccessToken();
-    const url = `${base}/v1/billing/subscriptions/${subscriptionID}`;
-
-    const payload = { status };
-
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      method: "PATCH",
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to update subscription status: ${errorText}`);
-    }
-
-    return handleResponse(response);
-  } catch (error) {
-    console.error("Failed to update subscription status:", error);
+    console.error("Failed to capture subscription:", error);
     throw error;
   }
 };
