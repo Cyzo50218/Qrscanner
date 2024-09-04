@@ -28,7 +28,7 @@ app.post('/subscription/daily/api/status', async (req, res) => {
     reminderInterval = 7 * 24 * 60 * 60 * 1000;
   } else if (subscriptionType === 'test'){
     reminderInterval = 24 * 60 * 60 * 1000;
-    }else {
+  } else {
     return res.status(400).send('Unsupported subscription type');
   }
 
@@ -47,7 +47,11 @@ app.post('/subscription/daily/api/status', async (req, res) => {
     subscriptionRef.update({
       status: 'expired'
     });
+    
+    await updateSubscriptionStatus(userName, 'subscribed expired for : ' + subscriptionType);
+
   });
+  
 
   schedule.scheduleJob('0 0 * * *', async () => {
     const currentTime = Date.now();
@@ -56,6 +60,9 @@ app.post('/subscription/daily/api/status', async (req, res) => {
       timeRemaining: timeRemaining > 0 ? timeRemaining : 0
     });
   });
+
+  // Call the function to update subscription status
+  await updateSubscriptionStatus(userName, 'subscribed: ' + subscriptionType);
 
   res.status(200).send('Subscription reminder scheduled');
 });
@@ -87,8 +94,11 @@ function sendNotification(userName, subscriptionType) {
 }
 
 function getTokenForUser(userName) {
-  return admin.database().ref(`/registered_users/${userName}/fcmToken`).once('value').then(snapshot => snapshot.val());
+  return admin.database().ref(`/registered_users/${userName}/token`).once('value').then(snapshot => snapshot.val());
+}
+
+async function updateSubscriptionStatus(userName, status) {
+  await admin.database().ref(`/registered_users/${userName}/status`).set(status);
 }
 
 module.exports = app;
-    
