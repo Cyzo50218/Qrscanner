@@ -47,8 +47,8 @@
       }
     },
     {
-      "src": "/subscription/daily/api/subscription/(.*)/capture",
-      "dest": "/subscription/daily/api/paypalHelpers.js",
+      "src": "/subscription/daily/api/subscriptions/(.*)/capture",
+      "dest": "/subscription/daily/api/captureOrder.js",
       "methods": ["POST", "OPTIONS"],
       "headers": {
         "Access-Control-Allow-Origin": "*",
