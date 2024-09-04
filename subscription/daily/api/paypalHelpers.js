@@ -196,3 +196,28 @@ export const createSubscriptionsWithPlanId = async (planId) => {
   }
 };
 
+export const captureSubscription = async (subscriptionID) => {
+  try {
+    const accessToken = await generateAccessToken();
+    const url = `${base}/v1/billing/subscriptions/${subscriptionID}/capture`;
+
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to capture subscription: ${errorText}`);
+    }
+
+    return handleResponse(response);
+  } catch (error) {
+    console.error("Failed to capture subscription:", error);
+    throw error;
+  }
+};
+
