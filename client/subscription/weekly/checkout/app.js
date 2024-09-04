@@ -20,9 +20,9 @@ function loadPayPalScript() {
     });
 }
 
-let userName = "";
-let email = "";
-let stats = "";
+let userName = "clintonpogi";
+let email = "clintonihegoro222";
+let stats = "test";
 
 function receiveUserData(name, userEmail, userStats) {
     userName = name;
