@@ -28,7 +28,7 @@ function receiveUserData(name, userEmail, userStats) {
     userName = name;
     email = userEmail;
     stats = userStats;
-    console.log("User data received: ", { userName, email, stats });
+    console.log("User data received: ", userName, email, stats );
 }
 
 function initPayPalButtons() {
