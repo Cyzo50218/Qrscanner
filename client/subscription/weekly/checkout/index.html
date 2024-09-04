@@ -8,6 +8,9 @@
     <title>PayPal subscription Qrscanner pro</title>
   </head>
   <body>
+    <script src="https://www.paypal.com/sdk/js?client-id=AdchnSRplQeuN4_MaZwIFzhl4iQ_nFP7ARTZnfJ3E7H-_rPbnLpsbKgdLf098LVoSFipi-q9Y3NE5N3C&vault=true&intent=subscription">
+</script> // Add your client_id
+
     <h1 class="title">Xmatrix.co.inc Qrscanner pro</h1>
 <div class="messages">
   <p>No more annoying ads 🚫</p>
@@ -22,7 +25,17 @@
 
     <div id="paypal-button-container"></div>
     <p class="watermark">@Qrcode scanner pro 2024 All right reserved!</p>
-    <script src="https://www.paypal.com/sdk/js?client-id=AdchnSRplQeuN4_MaZwIFzhl4iQ_nFP7ARTZnfJ3E7H-_rPbnLpsbKgdLf098LVoSFipi-q9Y3NE5N3C&vault=true&intent=subscription"></script>
- <script src="app.js"></script>
+<script>
+  paypal.Buttons({
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({
+        'plan_id': 'P-0BJ291634E5618438M3MHF7I' // Creates the subscription
+      });
+    },
+    onApprove: function(data, actions) {
+      alert('You have successfully subscribed to ' + data.subscriptionID); // Optional message given to subscriber
+    }
+  }).render('#paypal-button-container'); // Renders the PayPal button
+</script>
   </body>
 </html>
