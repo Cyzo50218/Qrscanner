@@ -135,6 +135,10 @@
       "dest": "/subscription/weekly/api/substatus.js"
     },
     {
+      "src": "/subscription/daily/api/createplan",
+      "dest": "/subscription/daily/api/create-plan.js"
+    },
+    {
       "src": "/subscription/daily/api/status",
       "dest": "/subscription/daily/api/substatus.js",
       "methods": ["GET", "POST", "OPTIONS"],
