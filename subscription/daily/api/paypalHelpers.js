@@ -169,7 +169,6 @@ export const createSubscriptionsWithPlanId = async (planId) => {
 
     const payload = {
       plan_id: planId,
-      // Add other required subscription details here
     };
 
     const response = await fetch(url, {
@@ -188,8 +187,7 @@ export const createSubscriptionsWithPlanId = async (planId) => {
       throw new Error(`Failed to create subscription: ${responseText}`);
     }
 
-    const jsonResponse = JSON.parse(responseText); // Parse response text
-    return { jsonResponse, httpStatusCode: response.status || 500 };
+    return handleResponse(response);
   } catch (error) {
     console.error("Failed to create subscription:", error);
     return { jsonResponse: { error: error.message || "Unknown error" }, httpStatusCode: 500 };

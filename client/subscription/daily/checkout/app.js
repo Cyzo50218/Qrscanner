@@ -110,7 +110,7 @@ fetch('/subscription/weekly/api/generateplan')
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    plan_id: productId
+                    plan_id: productId,
                 }),
             })
             .then(response => response.json())
