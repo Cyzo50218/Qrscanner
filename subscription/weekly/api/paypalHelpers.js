@@ -80,9 +80,12 @@ export const createPlan = async () => {
   try {
     const accessToken = await generateAccessToken();
     const url = `${base}/v1/billing/plans`;
+    
+    const productId = await createProduct();
+console.log("Product ID created:", productId);
 
     const payload = {
-      product_id: "weeklyplan888", // Replace this with your actual product ID
+      product_id: productId, // Replace this with your actual product ID
       name: "Weekly Subscription Plan",
       description: "Weekly subscription plan with 3-day free trial",
       billing_cycles: [
@@ -154,6 +157,41 @@ export const createPlan = async () => {
     throw error;
   }
 };
+
+export const createProduct = async () => {
+  try {
+    const accessToken = await generateAccessToken();
+    const url = `${base}/v1/catalogs/products`;
+
+    const payload = {
+      name: "Weekly billing plan 888",
+      description: "A subscription plan for weekly access",
+      type: "SERVICE",
+      category: "SOFTWARE"
+    };
+
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to create product: ${errorText}`);
+    }
+
+    const productData = await handleResponse(response);
+    return productData.jsonResponse.id;
+  } catch (error) {
+    console.error("Failed to create product:", error);
+    throw error;
+  }
+};
+
 
 export const createOrder = async (cart) => {
   try {
