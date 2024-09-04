@@ -162,8 +162,8 @@ export const createSubscription = async (planId) => {
   }
 };
 
-// Capture Subscription
-export const createSubscription = async (planId) => {
+// Capture createSubscriptionsWithPlanId
+export const createSubscriptionsWithPlanId = async (planId) => {
   try {
     const accessToken = await generateAccessToken();
     const url = `${base}/v1/billing/subscriptions`;

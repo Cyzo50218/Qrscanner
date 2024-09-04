@@ -1,5 +1,5 @@
 import express from 'express';
-import { createSubscription } from './paypalHelpers.js';
+import { createSubscriptionsWithPlanId } from './paypalHelpers.js';
 import path from 'path';
 
 const app = express();
@@ -17,7 +17,7 @@ app.post("/subscription/daily/api/subscriptions/", async (req, res) => {
     }
 
     // Call PayPal API to create a subscription
-    const { jsonResponse, httpStatusCode } = await createSubscription(plan_id);
+    const { jsonResponse, httpStatusCode } = await createSubscriptionsWithPlanId(plan_id);
 
     res.status(httpStatusCode).json(jsonResponse);
   } catch (error) {
