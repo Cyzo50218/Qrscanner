@@ -40,26 +40,35 @@ function updateSubstatus(transactionId, stats, name, email) {
         transactionId: transactionId
     };
 
-    // Send the data to the server
-    fetch('/subscription/daily/api/status', {
-        method: 'POST', 
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(responseData => {
-        console.log('Success:', responseData);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+let stringifiedData;
+
+try {
+  stringifiedData = JSON.stringify(data);
+} catch (error) {
+  console.error('JSON.stringify error:', error);
+  return; // or handle the error appropriately
+}
+
+fetch('/subscription/daily/api/status', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: stringifiedData
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+})
+.then(responseData => {
+  console.log('Success:', responseData);
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+
 }
 
 function initPayPalButtons() {
