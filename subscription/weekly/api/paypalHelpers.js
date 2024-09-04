@@ -75,6 +75,85 @@ export const captureOrder = async (orderID) => {
   }
 };
 
+// Create Subscription Plan with 3-Day Free Trial and Weekly Recurring Charge
+export const createPlan = async () => {
+  try {
+    const accessToken = await generateAccessToken();
+    const url = `${base}/v1/billing/plans`;
+
+    const payload = {
+      product_id: "YOUR_PRODUCT_ID", // Replace this with your actual product ID
+      name: "Weekly Subscription Plan",
+      description: "Weekly subscription plan with 3-day free trial",
+      billing_cycles: [
+        {
+          frequency: {
+            interval_unit: "WEEK",
+            interval_count: 1
+          },
+          tenure_type: "REGULAR",
+          sequence: 2,
+          total_cycles: 0, // 0 means indefinite billing cycles
+          pricing_scheme: {
+            fixed_price: {
+              value: "5.30",
+              currency_code: "USD"
+            }
+          }
+        },
+        {
+          frequency: {
+            interval_unit: "DAY",
+            interval_count: 3
+          },
+          tenure_type: "TRIAL",
+          sequence: 1,
+          total_cycles: 1,
+          pricing_scheme: {
+            fixed_price: {
+              value: "0",
+              currency_code: "USD"
+            }
+          }
+        }
+      ],
+      payment_preferences: {
+        auto_bill_outstanding: true,
+        setup_fee: {
+          value: "0",
+          currency_code: "USD"
+        },
+        setup_fee_failure_action: "CONTINUE",
+        payment_failure_threshold: 3
+      }
+    };
+
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to create subscription plan: ${errorText}`);
+    }
+
+    const planData = await handleResponse(response);
+
+    // Extract the plan ID from the response
+    const planId = planData.jsonResponse.id;
+    console.log(`Plan ID: ${planId}`);
+
+    return planId; // Return the plan ID for further use
+  } catch (error) {
+    console.error("Failed to create subscription plan:", error);
+    throw error;
+  }
+};
 
 export const createOrder = async (cart) => {
   try {

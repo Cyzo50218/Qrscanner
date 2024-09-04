@@ -136,8 +136,8 @@
       "dest": "/subscription/weekly/api/substatus.js"
     },
     {
-      "src": "/subscription/daily/api/generateplan",
-      "dest": "/subscription/daily/api/$1"
+      "src": "/subscription/weekly/api/generateplan",
+      "dest": "/subscription/weekly/api/create-plan.js"
     },
     {
       "src": "/subscription/daily/api/status",
