@@ -1,5 +1,5 @@
 
-import { createPlan } from './paypalHelpers'; // Adjust the path accordingly
+import { createPlan } from './paypalHelpers.js'; // Adjust the path accordingly
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
