@@ -41,7 +41,7 @@ function updateSubstatus(transactionId, stats, name, email) {
     };
 
     // Send the data to the server
-    fetch('/subscription/yearly/api/status', {
+    fetch('/subscription/daily/api/status', {
         method: 'POST', 
         headers: {
             'Content-Type': 'application/json'
@@ -89,10 +89,10 @@ function initPayPalButtons() {
     },
     createOrder() {
       console.log("Creating order...");
-      return fetch("/subscription/yearly/api/orders", {
+      return fetch("/subscription/weekly/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart: [{ id: "yearlyaccess4772", quantity: "1" }] }),
+        body: JSON.stringify({ cart: [{ id: "weeklyaccess3777", quantity: "1" }] }),
       })
       .then(response => response.json())
       .then(orderData => {
@@ -112,7 +112,7 @@ function initPayPalButtons() {
     },
     onApprove(data, actions) {
   console.log("Order approved:", data);
-  return fetch(`/subscription/yearly/api/orders/${data.orderID}/capture`, {
+  return fetch(`/subscription/weekly/api/orders/${data.orderID}/capture`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
   })
