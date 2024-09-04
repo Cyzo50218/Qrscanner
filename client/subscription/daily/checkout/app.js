@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadPayPalScript() {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        const scriptSrc = "https://www.paypal.com/sdk/js?client-id=AdchnSRplQeuN4_MaZwIFzhl4iQ_nFP7ARTZnfJ3E7H-_rPbnLpsbKgdLf098LVoSFipi-q9Y3NE5N3C&currency=USD&components=buttons";
-
+        const scriptSrc = "https: //www.paypal.com/sdk/js?client-id=AdchnSRplQeuN4_MaZwIFzhl4iQ_nFP7ARTZnfJ3E7H-_rPbnLpsbKgdLf098LVoSFipi-q9Y3NE5N3C&vault=true&intent=subscription";
         script.src = scriptSrc;
         script.async = true;
         script.onload = resolve;
@@ -113,7 +112,7 @@ onApprove: function(data, actions) {
           
                     alert('You have successfully subscribed to ' + data.subscriptionID); // Optional message given to subscriber
                     // Send signal to Android
-                    sendPurchaseSignalToAndroid(data.subscriptionID, data.subscriptionType);
+                    sendPurchaseSignalToAndroid(data.subscriptionID, data.su);
                     
                    
                 }
