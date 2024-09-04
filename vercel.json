@@ -58,7 +58,7 @@
 },
     {
       "src": "/subscription/daily/api/subscriptions",
-      "dest": "/subscription/daily/api/paypalHelpers.js",
+      "dest": "/subscription/daily/api/orders.js",
       "methods": ["GET", "POST", "OPTIONS"],
       "headers": {
         "Access-Control-Allow-Origin": "*",
