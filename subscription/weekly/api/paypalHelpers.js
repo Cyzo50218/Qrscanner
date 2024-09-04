@@ -82,7 +82,7 @@ export const createPlan = async () => {
     const url = `${base}/v1/billing/plans`;
 
     const payload = {
-      product_id: "YOUR_PRODUCT_ID", // Replace this with your actual product ID
+      product_id: "weeklyplan888", // Replace this with your actual product ID
       name: "Weekly Subscription Plan",
       description: "Weekly subscription plan with 3-day free trial",
       billing_cycles: [
