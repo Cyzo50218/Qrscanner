@@ -105,7 +105,7 @@ fetch('/subscription/weekly/api/generateplan')
         },
         createSubscription: function(data, actions) {
             return actions.subscription.create({
-  'plan_id': 'P-7LW951417X003930PM3MIXCY' // Creates the subscription
+  'plan_id': 'P-0BJ291634E5618438M3MHF7I' // Creates the subscription
 });
 },
 onApprove: function(data, actions) {
@@ -116,7 +116,7 @@ onApprove: function(data, actions) {
                     
                    
                 }
-    }).render("#paypal-button-container-P-7LW951417X003930PM3MIXCY").catch(error => {
+    }).render("#paypal-button-container-P-0BJ291634E5618438M3MHF7I").catch(error => {
         console.error('Failed to render PayPal Buttons:', error);
         document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
     });
