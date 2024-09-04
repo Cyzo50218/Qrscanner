@@ -162,15 +162,14 @@ export const createSubscription = async (planId) => {
   }
 };
 
-// Capture createSubscriptionsWithPlanId
 export const createSubscriptionsWithPlanId = async (planId) => {
   try {
     const accessToken = await generateAccessToken();
     const url = `${base}/v1/billing/subscriptions`;
 
     const payload = {
-      plan_id: planId, // Plan ID from createPlan
-      // Subscription details
+      plan_id: planId,
+      // Add other required subscription details here
     };
 
     const response = await fetch(url, {
@@ -182,16 +181,18 @@ export const createSubscriptionsWithPlanId = async (planId) => {
       body: JSON.stringify(payload),
     });
 
+    const responseText = await response.text(); // Get raw response text for debugging
+    console.log("PayPal Response Text:", responseText); // Log the response text
+
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to create subscription: ${errorText}`);
+      throw new Error(`Failed to create subscription: ${responseText}`);
     }
 
-    const subscriptionData = await response.json();
-    return subscriptionData.id; // Subscription ID
+    const jsonResponse = JSON.parse(responseText); // Parse response text
+    return { jsonResponse, httpStatusCode: response.status || 500 };
   } catch (error) {
     console.error("Failed to create subscription:", error);
-    throw error;
+    return { jsonResponse: { error: error.message || "Unknown error" }, httpStatusCode: 500 };
   }
 };
 
