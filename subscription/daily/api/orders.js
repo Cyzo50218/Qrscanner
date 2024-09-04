@@ -12,6 +12,10 @@ app.post("/subscription/daily/api/subscriptions/", async (req, res) => {
   try {
     const { plan_id } = req.body;
 
+    if (!plan_id) {
+      return res.status(400).json({ error: "Plan ID is required." });
+    }
+
     // Call PayPal API to create a subscription
     const { jsonResponse, httpStatusCode } = await createSubscription(plan_id);
 
