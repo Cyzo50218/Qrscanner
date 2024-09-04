@@ -1,6 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM fully loaded and parsed.");
 
+fetch('/subscription/weekly/api/generateplan')
+        .then(response => response.json())
+        .then(data => {
+            if (data.planId) {
+                console.log("Generated PayPal Plan ID:", data.planId);
+            } else {
+                console.error("Failed to retrieve plan ID.");
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching plan ID:", error);
+        });
+        
     loadPayPalScript().then(initPayPalButtons).catch(error => {
         console.error('Failed to load PayPal SDK:', error);
         document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
