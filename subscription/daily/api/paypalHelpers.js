@@ -163,10 +163,15 @@ export const createSubscription = async (planId) => {
 };
 
 // Capture Subscription
-export const captureSubscription = async (subscriptionID) => {
+export const createSubscription = async (planId) => {
   try {
     const accessToken = await generateAccessToken();
-    const url = `${base}/v1/billing/subscriptions/${subscriptionID}/capture`;
+    const url = `${base}/v1/billing/subscriptions`;
+
+    const payload = {
+      plan_id: planId, // Plan ID from createPlan
+      // Subscription details
+    };
 
     const response = await fetch(url, {
       headers: {
@@ -174,16 +179,19 @@ export const captureSubscription = async (subscriptionID) => {
         Authorization: `Bearer ${accessToken}`,
       },
       method: "POST",
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Failed to capture subscription: ${errorText}`);
+      throw new Error(`Failed to create subscription: ${errorText}`);
     }
 
-    return handleResponse(response);
+    const subscriptionData = await response.json();
+    return subscriptionData.id; // Subscription ID
   } catch (error) {
-    console.error("Failed to capture subscription:", error);
+    console.error("Failed to create subscription:", error);
     throw error;
   }
 };
+
