@@ -1,9 +1,11 @@
 const admin = require('firebase-admin');
 const schedule = require('node-schedule');
 const express = require('express');
+import cors from 'cors'; // Ensure you have this installed
 
 const app = express();
 app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -65,6 +67,7 @@ app.post('/subscription/daily/api/status', async (req, res) => {
   await updateSubscriptionStatus(userName, 'subscribed: ' + subscriptionType);
 
   res.status(200).send('Subscription reminder scheduled');
+  
 });
 
 function sendNotification(userName, subscriptionType) {
