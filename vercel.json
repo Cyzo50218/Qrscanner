@@ -57,7 +57,7 @@
       }
 },
     {
-      "src": "/subscription/daily/api/subscription",
+      "src": "/subscription/daily/api/subscriptions",
       "dest": "/subscription/daily/api/paypalHelpers.js",
       "methods": ["GET", "POST", "OPTIONS"],
       "headers": {
