@@ -104,73 +104,20 @@ fetch('/subscription/weekly/api/generateplan')
             color: "blue",
             label: "subscribe",
         },
-        createOrder() {
-            console.log("Creating subscription...");
-            return fetch("/subscription/daily/api/subscriptions", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    plan_id: productId,
-                }),
-            })
-            .then(response => response.json())
-            .then(orderData => {
-                console.log("Subscription created:", orderData);
-                if (orderData.id) {
-                    return orderData.id;
-                }
-                const errorDetail = orderData?.details?.[0];
-                const errorMessage = errorDetail ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})` : JSON.stringify(orderData);
-                throw new Error(errorMessage);
-            })
-            .catch(error => {
-                console.error("Error creating subscription:", error);
-                document.getElementById('result-message').innerHTML = `Could not initiate PayPal Checkout...<br><br>${error.message}`;
-                throw error;
-            });
-        },
-        onApprove(data, actions) {
-            console.log("Subscription approved:", data);
-            return fetch(`/subscription/daily/api/subscriptions/${data.subscriptionID}/capture`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-            })
-            .then(response => response.json())
-            .then(orderData => {
-                console.log("Subscription captured:", orderData);
-                const errorDetail = orderData?.details?.[0];
-                if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-                    return actions.restart();
-                } else if (errorDetail) {
-                    throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
-                } else if (!orderData.purchase_units) {
-                    throw new Error(JSON.stringify(orderData));
-                } else {
-                    const transaction = orderData?.purchase_units?.[0]?.payments?.captures?.[0] || orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
-                    document.getElementById('result-message').innerHTML = `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`;
-                    console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
-                    
-                    console.log("Subscription successful!", transaction);
-                    
+        createSubscription: function(data, actions) {
+            return actions.subscription.create({
+  'plan_id': 'P-7LW951417X003930PM3MIXCY' // Creates the subscription
+});
+},
+onApprove: function(data, actions) {
+          
+                    alert('You have successfully subscribed to ' + data.subscriptionID); // Optional message given to subscriber
                     // Send signal to Android
-                    sendPurchaseSignalToAndroid(transaction.id, transaction.status);
+                    sendPurchaseSignalToAndroid(data.subscriptionID, data.subscriptionType);
                     
                    
                 }
-            })
-            .catch(error => {
-                console.error("Error capturing subscription:", error);
-                document.getElementById('result-message').innerHTML = `Sorry, your transaction could not be processed...<br><br>${error.message}`;
-                
-                // Send error signal to Android
-                sendPurchaseSignalToAndroid("ERROR", error.message);
-            });
-        },
-        onError: (err) => {
-            console.error("PayPal Buttons Error:", err);
-            document.getElementById('result-message').textContent = `An error occurred: ${err.message}`;
-        },
-    }).render("#paypal-button-container-P-5N9390725V568580HM3MIZ6Q").catch(error => {
+    }).render("#paypal-button-container-P-7LW951417X003930PM3MIXCY").catch(error => {
         console.error('Failed to render PayPal Buttons:', error);
         document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
     });
