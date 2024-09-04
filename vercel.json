@@ -121,7 +121,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/subscription/weekly/api/create-plan.js"
     },
     {
       "src": "/base/scan(:path*)",
