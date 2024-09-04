@@ -170,7 +170,7 @@ fetch('/subscription/weekly/api/generateplan')
             console.error("PayPal Buttons Error:", err);
             document.getElementById('result-message').textContent = `An error occurred: ${err.message}`;
         },
-    }).render("#paypal-button-container").catch(error => {
+    }).render("#paypal-button-container-P-5N9390725V568580HM3MIZ6Q").catch(error => {
         console.error('Failed to render PayPal Buttons:', error);
         document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
     });
