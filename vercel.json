@@ -13,8 +13,7 @@
     { "src": "subscription/daily/api/captureOrder.js", "use": "@vercel/node" },
     { "src": "client/subscription/yearly/checkout/**", "use": "@vercel/static" },
     { "src": "client/subscription/weekly/checkout/**", "use": "@vercel/static" },
-    { "src": "client/subscription/daily/checkout/**", "use": "@vercel/static" },
-    { "src": "index.html", "use": "@vercel/static" }
+    { "src": "client/subscription/daily/checkout/**", "use": "@vercel/static" }
   ],
   "routes": [
     {
