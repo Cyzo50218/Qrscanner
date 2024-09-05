@@ -52,7 +52,7 @@ function initPayPalButtons() {
 },
         createSubscription: function(data, actions) {
             return actions.subscription.create({
-  'plan_id': 'P-3L729787DP079342EM3MQYLY' // Creates the subscription
+  'plan_id': 'P-2AL81846VX6178208M3MRERA' // Creates the subscription
 });
 },
 onApprove: function(data, actions) {
@@ -63,7 +63,7 @@ onApprove: function(data, actions) {
                     
                    
                 }
-    }).render("#paypal-button-container-P-3L729787DP079342EM3MQYLY").catch(error => {
+    }).render("#paypal-button-container-P-2AL81846VX6178208M3MRERA").catch(error => {
         console.error('Failed to render PayPal Buttons:', error);
         document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
     });
