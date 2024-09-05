@@ -21,45 +21,6 @@ function loadPayPalScript() {
     });
 }
 
-function updateSubstatus(transactionId, stats, name, email) {
-    // Create the data object to send to the server
-    const data = {
-        userName: name,
-        email: email,
-        subscriptionType: stats,
-        transactionId: transactionId
-    };
-
-    let stringifiedData;
-
-    try {
-        stringifiedData = JSON.stringify(data);
-    } catch (error) {
-        console.error('JSON.stringify error:', error);
-        return; // or handle the error appropriately
-    }
-
-    fetch('/subscription/daily/api/status', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: stringifiedData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(responseData => {
-        console.log('Success:', responseData);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
 let productId;
 
 function initPayPalButtons() {
@@ -69,9 +30,9 @@ function initPayPalButtons() {
         return;
     }
 
-    function sendPurchaseSignalToAndroid(transactionId, status) {
+    function sendPurchaseSignalToAndroid(transactionId) {
         if (window.Android && typeof window.Android.onPurchaseComplete === "function") {
-            window.Android.onPurchaseComplete(transactionId, status);
+            window.Android.onPurchaseComplete(transactionId, ' - Weekly access');
         } else {
             console.log("Android interface not available");
         }
@@ -80,43 +41,29 @@ function initPayPalButtons() {
     console.log("Initializing PayPal Buttons...");
 
 
-fetch('/subscription/weekly/api/generateplan')
-  .then(response => response.json())
-  .then(data => {
-    if (data.planId) {
-      console.log("Generated PayPal Plan ID:", data.planId);
-      
-      productId = data.planId;
-    } else {
-      console.error("Failed to retrieve plan ID.");
-    }
-  })
-  .catch(error => {
-    console.error("Error fetching plan ID:", error);
-  });
-  
+
   
     paypal.Buttons({
         style: {
-            shape: "pill",
-            layout: "vertical",
-            color: "blue",
-            label: "subscribe",
-        },
+  shape: 'pill',
+  color: 'white',
+  layout: 'vertical',
+  label: 'subscribe'
+},
         createSubscription: function(data, actions) {
             return actions.subscription.create({
-  'plan_id': 'P-0BJ291634E5618438M3MHF7I' // Creates the subscription
+  'plan_id': 'P-3L729787DP079342EM3MQYLY' // Creates the subscription
 });
 },
 onApprove: function(data, actions) {
           
                     alert('You have successfully subscribed to ' + data.subscriptionID); // Optional message given to subscriber
                     // Send signal to Android
-                    sendPurchaseSignalToAndroid(data.subscriptionID, data.su);
+                    sendPurchaseSignalToAndroid(data.subscriptionID);
                     
                    
                 }
-    }).render("#paypal-button-container-P-0BJ291634E5618438M3MHF7I").catch(error => {
+    }).render("#paypal-button-container-P-3L729787DP079342EM3MQYLY").catch(error => {
         console.error('Failed to render PayPal Buttons:', error);
         document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
     });

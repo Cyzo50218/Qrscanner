@@ -1,66 +1,70 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM fully loaded and parsed.");
-
-    initializePayPalButtons();
     
+    
+
+    loadPayPalScript().then(initPayPalButtons).catch(error => {
+        console.error('Failed to load PayPal SDK:', error);
+        document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
+    });
 });
 
-function initializePayPalButtons(planId) {
-    paypal.Buttons({
-        style: {
-            shape: 'pill',       // Options: 'pill' | 'rect'
-            color: 'blue',       // Options: 'gold' | 'blue' | 'silver' | 'white' | 'black'
-            label: 'subscribe',  // Options: 'checkout' | 'pay' | 'buynow' | 'paypal' | 'installment' | 'subscribe' | 'donate'
-            layout: 'vertical'   // Options: 'horizontal' | 'vertical'
-        },
-        createSubscription: function(data, actions) {
-            // Creates the subscription with the retrieved plan ID
-            return actions.subscription.create({
-                'plan_id': 'P-0BJ291634E5618438M3MHF7I'
-            });
-        },
-        onApprove: function(data) {
-            console.log('Subscription approved:', data);
-            alert('You have successfully subscribed with ID: ' + data.subscriptionID);
-
-            // Call to update the subscription status
-            updateSubstatus(data.subscriptionID, stats, userName, email);
-        },
-        onError: function(err) {
-            console.error("PayPal Buttons Error:", err);
-            document.getElementById('result-message').textContent = `An error occurred: ${err.message}`;
-        }
-    }).render('#paypal-button-container').catch(error => {
-        console.error('Failed to render PayPal Buttons:', error);
-        document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
+function loadPayPalScript() {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        const scriptSrc = "https://www.paypal.com/sdk/js?client-id=ARIFr8TpW3U0MgYuDHcXpodVqMA3q800Iy1t8lIzHrD1YmleqHu4TC4J3h2801uRWAInenWsMQSPgQgE&vault=true&intent=subscription";
+        script.src = scriptSrc;
+        script.async = true;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Failed to load PayPal SDK'));
+        document.body.appendChild(script);
     });
 }
 
-let userName = "clintonpogi";
-let email = "clintonihegoro222";
-let stats = "test";
+let productId;
 
-function updateSubstatus(transactionId, stats, name, email) {
-    const data = {
-        userName: name,
-        email: email,
-        subscriptionType: stats,
-        transactionId: transactionId
-    };
+function initPayPalButtons() {
+    if (typeof paypal === 'undefined') {
+        console.error('PayPal SDK not loaded');
+        document.getElementById('result-message').textContent = 'PayPal SDK failed to load. Please try again later.';
+        return;
+    }
 
-    fetch('/subscription/daily/api/status', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.json();
-    })
-    .then(responseData => {
-        console.log('Success:', responseData);
-    })
-    .catch(error => {
-        console.error('Error updating subscription status:', error);
+    function sendPurchaseSignalToAndroid(transactionId) {
+        if (window.Android && typeof window.Android.onPurchaseComplete === "function") {
+            window.Android.onPurchaseComplete(transactionId, ' - Weekly access');
+        } else {
+            console.log("Android interface not available");
+        }
+    }
+
+    console.log("Initializing PayPal Buttons...");
+
+
+
+  
+    paypal.Buttons({
+        style: {
+  shape: 'pill',
+  color: 'white',
+  layout: 'vertical',
+  label: 'subscribe'
+},
+        createSubscription: function(data, actions) {
+            return actions.subscription.create({
+  'plan_id': 'P-3L729787DP079342EM3MQYLY' // Creates the subscription
+});
+},
+onApprove: function(data, actions) {
+          
+                    alert('You have successfully subscribed to ' + data.subscriptionID); // Optional message given to subscriber
+                    // Send signal to Android
+                    sendPurchaseSignalToAndroid(data.subscriptionID);
+                    
+                   
+                }
+    }).render("#paypal-button-container-P-3L729787DP079342EM3MQYLY").catch(error => {
+        console.error('Failed to render PayPal Buttons:', error);
+        document.getElementById('result-message').textContent = 'Failed to initialize PayPal. Please try again later.';
     });
 }
