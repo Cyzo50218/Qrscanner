@@ -124,7 +124,7 @@
     },
     {
       "src": "/base/scan(:path*)",
-      "dest": "/index.html"
+      "dest": "/404.html"
     },
     {
       "src": "/subscription/yearly/api/status",
