@@ -46,13 +46,13 @@ function initPayPalButtons() {
     paypal.Buttons({
         style: {
   shape: 'pill',
-  color: 'blue',
+  color: 'white',
   layout: 'vertical',
   label: 'subscribe'
 },
         createSubscription: function(data, actions) {
             return actions.subscription.create({
-  'plan_id': 'P-2KX12943XA0472712M3MQ7PQ' // Creates the subscription
+  'plan_id': 'P-849157995L8231227M5BS2SY' // Creates the subscription
 });
 },
 onApprove: function(data, actions) {
