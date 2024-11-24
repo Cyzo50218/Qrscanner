@@ -52,7 +52,7 @@ function initPayPalButtons() {
 },
         createSubscription: function(data, actions) {
             return actions.subscription.create({
-  'plan_id': 'P-3CF82643GE634745DM5BSHSI' // Creates the subscription
+  'plan_id': 'P-0RG73099PG742311JM5BSL7Q' // Creates the subscription
 });
 },
 onApprove: function(data, actions) {
