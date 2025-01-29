@@ -14,7 +14,11 @@
     { "src": "client/subscription/yearly/checkout/**", "use": "@vercel/static" },
     { "src": "client/subscription/weekly/checkout/**", "use": "@vercel/static" },
     { "src": "client/subscription/daily/checkout/**", "use": "@vercel/static" },
-    { "src": "index.html", "use": "@vercel/static" }
+    { "src": "index.html", "use": "@vercel/static" }, 
+       { "src": "medical-checkup.png", "use": "@vercel/static" }, 
+           { "src": "schedule.html", "use": "@vercel/static" }, 
+       { "src": "medical-team.png", "use": "@vercel/static" }, 
+              { "src": "house.png", "use": "@vercel/static" }
  
   ],
   "routes": [
