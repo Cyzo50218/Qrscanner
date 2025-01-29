@@ -1,283 +1,1136 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-   <meta name="google-adsense-account" content="ca-pub-1616849467683942">
-  <title>QrRedirector</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Sidebar with Multiple Pages</title>
+  <style>
+    /* Base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    .header_font{
+     font-size: 16px;
+     margin-right: 5px;
+     color: #333438;
+    }
+    
+    .title{
+      font-size:30px;
+      margin-left: 6px;
+      margin-top: 16px;
+      margin-bottom: 12px;
+      color: #2D5772;
+    }
+    
+    section p{
+      margin-left: 6px;
+      color:#7E8B9F;
+    }
+    
+    .divider{
+      height: 30px;
+      border-bottom: 1px solid #BBC4D7;
+      margin-right: 6px;
+      width: 100vw;
+      margin-left: 6px;
+      margin-bottom: 10px;
+    }
+    .dividernospace{
+      
+      height: 30px;
+      
+      margin-right: 6px;
+      margin-bottom: 10px;
+    
+    }
+    .indication{
+      margin-top: 12px;
+      font-size:16px;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      display: grid;
+      grid-template-columns: 250px 1fr; /* Sidebar and content */
+      height: 100vh;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    section{
+      
+      margin: 5px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        grid-template-columns: 0 1fr; /* Hide sidebar on smaller screens */
+      }
+
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        height: 100%;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .sidebar.open {
+        left: 0; /* Show sidebar */
+      }
+
+      .main-content {
+        grid-column: 1 / -1; /* Take up full width when sidebar is hidden */
+      }
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      background-color: #E8F0FA;
+      color: #fff;
+      padding: 1rem;
+    
+      height: 100%;
+    }
+    
+    .sidebar_title{
+      color: #373A44;
+    }
+
+    .sidebar .back-button {
+      display: none;
+      background: #EAEFF6;
+      color: #373A44;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 1rem;
+    }
+
+    .sidebar ul li a {
+      color: #373A44;
+      margin-top: 20px;
+      text-decoration: none;
+      display: block;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      position: relative;
+      transition: background 0.3s;
+    }
+    
+
+.sidebar ul li a.selected {
+  background-color: #D8E2EF; /* Highlight color */
+  border-left: 5px solid #183F62; /* Vertical line indicating the active page */
+}
+
+
+    .sidebar ul li a:hover {
+      background-color: #D1DEEC;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar .back-button {
+        display: block; /* Show back button on mobile */
+      }
+    }
+    
+     .sidebar{
+       width: 250px;
+     }
+    /* Main content styles */
+    .main-content {
+      background-color: #F0F5FF;
+      overflow-y: auto;
+      
+    }
+
+.main-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw; /* Full viewport width */
+    background-color: #F6F9FF;
+    color: white;
+    padding: 1rem;
+    border-bottom: 1px solid #BBC4D7;
+    position: relative;
+    overflow: hidden; /* Prevent overflow */
+}
+
+    .hamburger {
+      display: none
+      font-size: 1.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #333438;
+    }
+
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+      
+    }
+    
+    @media screen and (max-width: 580px) {
+  body {
+    font-size: 16px;
+    line-height: 22px;
+    
+  }
+}
+
+.wrapper {
+  margin: 0 auto;
+  margin-top: 10px;
+  padding-left: 6px;
+  padding-top: 12px;
+  max-width: 800px;
+}
+.table {
+  margin: 0 0 5px 0;
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 15px; /* Apply rounded corners */
+  overflow: hidden; /* Ensure the table corners are clipped properly */
+  display: table;
   
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="style.css">
-</head>
+}
 
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    white-space: nowrap; /* Prevent table from breaking */
+}
+
+
+@media screen and (max-width: 580px) {
+  .table {
+    display: block;
+    border-radius: 15px; /* Keep rounded corners on small screens */
+    overflow: hidden; /* Ensure corners are clipped properly */
+  }
+  
+}
+
+.row {
+  display: table-row;
+  background: #f6f6f6;
+}
+
+.row:nth-of-type(odd) {
+  background: #e9e9e9;
+}
+
+.row.header {
+  font-weight: 900;
+  color: #ffffff;
+  background: #ea6153;
+}
+
+.row.green {
+  background: #27ae60;
+}
+
+.row.blue {
+  background: linear-gradient(45deg, #2A364A, #587191); /* Gradient from one color to another */
+}
+
+@media screen and (max-width: 580px) {
+  .row {
+    padding: 14px 0 7px;
+    display: block;
+    border-radius: 8px; /* Apply rounded edges for rows on small screens */
+  }
+
+  .row.header {
+    padding: 0;
+    height: 6px;
+  }
+
+  .row.header .cell {
+    display: none;
+  }
+
+  .row .cell {
+    margin-bottom: 10px;
+  }
+
+  .row .cell:before {
+    margin-bottom: 3px;
+    content: attr(data-title);
+    min-width: 98px;
+    font-size: 10px;
+    line-height: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #969696;
+    display: block;
+  }
+}
+
+.cell {
+  padding: 6px 9px;
+  display: table-cell;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 580px) {
+  .cell {
+    padding: 2px 16px;
+    display: block;
+  }
+}
+
+    .hidden {
+    display: none;
+    }
+    
+.search-container {
+  margin-left: 6px;
+  display: flex;
+  justify-content: space-between;
+  justify-content: start; /* Center the search bar horizontally */
+  align-items: center;
+}
+
+#searchInput {
+  width: 100%;
+  max-width: 200px; /* Set a max width for better control */
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 4px; /* Rounded edges for a modern look */
+  border: 1px solid #ddd; /* Light border */
+  background-color: #f7f7f7; /* Light background */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: all 0.3s ease-in-out; /* Smooth transition for hover effect */
+}
+
+#searchInput:focus {
+  outline: none; /* Remove default focus outline */
+  border-color: #5985F2; /* Highlight the border when focused */
+  box-shadow: 0 4px 8px rgba(93, 156, 236, 0.3); /* Slightly stronger shadow on focus */
+}
+
+#searchInput::placeholder {
+  color: #aaa; /* Placeholder color */
+  padding-left: 18px;
+  font-style: normal; /* Italicize the placeholder for emphasis */
+}
+
+#filterBy {
+  width: 100%;
+  height: 38px;
+  max-width: 230px; /* Set a max width for better control */
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 4px; /* Rounded edges for a modern look */
+  border: 1px solid #ddd; /* Light border */
+  background-color: #f7f7f7; /* Light background */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out; /* Smooth transition for hover effect */
+  overflow: hidden; /* Hide any overflow content */
+  white-space: nowrap; /* Prevent text from wrapping */
+  text-overflow: ellipsis; /* Show ellipsis if the text overflows */
+}
+#filterBy:focus {
+  outline: none; /* Remove default focus outline */
+    border-color: #5985F2; /* Blue border on focus */
+    box-shadow: 0 4px 8px rgba(93, 156, 236, 0.3); /* Slightly stronger shadow on focus */
+  }
+.search-input-wrapper {
+  position: relative;
+  width: 200px;
+}
+
+.search-input-wrapper input {
+  width: 100%;
+  padding: 10px;
+  padding-left: 30px; /* Space for the icon */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  opacity: 0.3;
+  /* Adjust the value as needed */
+}
+.filter-container {
+  display: flex;
+  
+  align-items: start;
+}
+.indication{
+  padding-bottom: 8px;
+}
+.filter-container select {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Rounded edges for a modern look */
+  border: 1px solid #ddd; /* Light border */
+  background-color: #f7f7f7; /* Light background */
+  margin-left: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th, table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    background-color: #f4f4f4;
+}
+
+.data-container {
+
+    display: flex;      /* Make the container a flexbox */
+    flex-direction: column; /* Stack items horizontally */
+    overflow:hidden;
+    
+}
+
+.data-container div{
+  float:left;
+}
+/* Each data section fills equal space */
+.data {
+    flex: 1; /* Makes each item take equal horizontal space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centers content */
+    text-align: center;
+    background: white;
+    height:  200px;
+    min-width: 200px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 5px; /* Small space between items */
+}
+
+/* Image styling */
+.data img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 16px;
+}
+
+/* Text styling */
+.data p {
+    font-size: 16px;
+    color: #7E8B9F;
+    margin-top: 8px;
+}
+
+/* Number styling */
+.data h1 {
+    font-size: 30px;
+    color: #4D8CD0;
+}
+
+/* Responsive: Stack vertically on small screens */
+@media (max-width: 768px) {
+    .data-container {
+        flex-direction: column; /* Stacks vertically on smaller screens */
+    }
+}
+
+
+    </style>
+    </head>
 <body>
-  <h1>Redirecting you to the qr link...</h1>
-<p class="message">Unlock the power of QR codes with our QR Scanner and Converter app!
-<a href="https://play.google.com/store">Click here</a> to try it out on the Play Store and discover how you can easily create detailed analytics📉📈 of your QR code scans. Start optimizing your reach today! 🚀</p>
+  
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <button class="back-button" id="backButton">← Back</button>
+    <h2 class="sidebar_title">My Panel</h2>
+    <ul>
+      <li><a href="#dashboard" class="menu-link selected" data-section="dashboard">Dashboard</a></li>
+      <li><a href="#users" class="menu-link" data-section="users">Users</a></li>
+      <li><a href="#settings" class="menu-link" data-section="settings">Settings</a></li>
+      <li><a href="#records" class="menu-link" data-section="records">Records</a></li>
+      <li><a href="#logout" class="menu-link" data-section="logout">Logout</a></li>
+    </ul>
+  </div>
 
-  <script type="module">
-    import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
-import { getFirestore, doc, getDoc, updateDoc, setDoc, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <button class="hamburger" id="hamburger">☰</button>
+      <h1 class="header_font">Health Management Panel</h1>
+    </header>
+
+    <!-- Dashboard Section -->
+<section id="dashboard" class="content-section">
+  <h2 class="title">Dashboard</h2>
+  <p>Welcome to your dashboard.</p>
+  
+                    <div class="dividernospace"></div>
+<div class="data-container">
+    <div class="container">
+        <div class="data">
+            <img src="patients.png" alt="Patients">
+            <p>Total Patients</p>
+            <h1 id="patients_num">23</h1>
+        </div>
+
+        <div class="data">
+            <img src="appointments.png" alt="Appointments">
+            <p>Total Appointments</p>
+            <h1 id="appointments_num">9</h1>
+        </div>
+
+        <div class="data">
+            <img src="staffs.png" alt="Staffs">
+            <p>Total Staffs</p>
+            <h1 id="staff_num">20</h1>
+        </div>
+    </div>
+</div>
+<div class="data-container">
+    <div class="container">
+
+        <div class="data">
+            <img src="residents.png" alt="Staffs">
+            <p>Total Vaccinations</p>
+            <h1 id="Residents_num">13</h1>
+        </div>
+    </div>
+</div>
 
     
-const firebaseConfig = {
-  apiKey: "AIzaSyDPXfq-rqK87OyVh0p9n0iEzIUGcxEDLW0",
-  authDomain: "qrscanner-1a132.firebaseapp.com",
-  databaseURL: "https://qrscanner-1a132-default-rtdb.firebaseio.com",
-  projectId: "qrscanner-1a132",
-  storageBucket: "qrscanner-1a132.appspot.com",
-  messagingSenderId: "545133545151",
-  appId: "1:545133545151:web:eddca20f36d236be31e80a",
-  measurementId: "G-CQL2JNS9YY"
-};
+</section>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const realtimeDb = getDatabase(app); // Initialize the Realtime Database
-// Function to get URL parameters
-function getUrlParams() {
-  const path = window.location.pathname;
-  const params = {};
+    <!-- Users Section -->
+    <section id="users" class="content-section hidden">
+      <h2 class="title">Users</h2>
+      <p>Manage user information here.</p>
+      
+              <div class="divider"></div>
+              
+              <div>
+                <h2 class="title">User Account Records</h2>
+      
+                <p class="indication">Search</p>
+                <!-- Search Bar -->
+                <div class="search-container">
+                  <div class="search-input-wrapper">
+                    <input type="text" id="searchInput" placeholder="Search by User Id..." onkeyup="filterTable()">
+                    <!-- Use an online source for the search icon -->
+      
+                    <img id="searchicon" src="search-icon.png" alt="Search Icon" class="search-icon">
+                  </div>
+                  <p class="indication">Filter:</p>
+                  <div class="filter-container">
+                    <select id="filterBy" onchange="filterTable()">
+                      <option value="id">ID</option>
+                      <option value="name">Name</option>
+                      <option value="type">Type</option>
+                    </select>
+                  </div>
+                </div>
+      
+                <div class="wrapper">
+                  <div class="table">
+                    <div class="row header blue">
+                      <div class="cell">User Id</div>
+                      <div class="cell">User Name</div>
+                      <div class="cell">Password</div>
+                      <div class="cell">User Type</div>
+                    </div>
+                         <div class="row">
+                      <div class="cell" data-title="User Id">MPH1</div>
+                      <div class="cell" data-title="Name">Clinton Ikenna Ihegoro</div>
+                         <div class="cell" data-title="Password">Admin#@222</div>
+                      <div class="cell" data-title="User Type">Admin</div>
+                    </div>
 
-  // Assuming the path format is /base/scan{uuid}
-  const scanIndex = path.indexOf('scan');
+                    <div class="row">
+                      <div class="cell" data-title="User Id">MPH1000</div>
+                      <div class="cell" data-title="Name">Juan Dela Cruz</div>
+                         <div class="cell" data-title="Password">SecureBMHW@#912</div>
+                      <div class="cell" data-title="User Type">BHW</div>
+                    </div>
 
-  if (scanIndex !== -1) {
-    // Extract everything after 'scan' as the uuid
-    params.uuid = path.substring(scanIndex + 4); // 4 is the length of the word 'scan'
-  }
+                  </div>
+                </div>
+      
+                <div class="divider"></div>
+              </div>
+              
+                            <div>
+                              <h2 class="title">Registration Records</h2>
+              
+                              <p class="indication">Search</p>
+                              <!-- Search Bar -->
+                              <div class="search-container">
+                                <div class="search-input-wrapper">
+                                  <input type="text" id="searchInput" placeholder="Search by User Id..." onkeyup="filterTable()">
+                                  <!-- Use an online source for the search icon -->
+              
+                                  <img id="searchicon" src="search-icon.png" alt="Search Icon" class="search-icon">
+                                </div>
+                                <p class="indication">Filter:</p>
+                                <div class="filter-container">
+                                  <select id="filterBy" onchange="filterTable()">
+                                    <option value="id">ID</option>
+                                    <option value="name">Name</option>
+                                 
+                                  </select>
+                                </div>
+                              </div>
+              
+                              <div class="wrapper">
+                                <div class="table">
+                                  <div class="row header blue">
+                                    <div class="cell">Category</div>
+                                    <div class="cell">Details</div>
+                                                           <div class="cell" data-title=""></div>
+                                                           <div class="cell" data-title=""></div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="cell" data-title="Personal Details">1.Personal Details</div>
+                                    <div class="cell" data-title=""></div>
+                                                           <div class="cell" data-title=""></div>
+                                                           <div class="cell" data-title=""></div>
+                                    </div>
+                                  <div class="row">
+                                    <div class="cell" data-title="Full Name">Full Name</div>
+                                    <div class="cell" data-title="">Juan Dela Cruz</div>
+                                                           <div class="cell" data-title=""></div>
+                                                           <div class="cell" data-title=""></div>
+                                  </div>
+                                                                    <div class="row">
+                                                                      <div class="cell" data-title="Date Of Birth">Date of Birth</div>
+                                                                      <div class="cell" data-title="">3/5/1980</div>
+                                                                                             <div class="cell" data-title=""></div>
+                                                                                             <div class="cell" data-title=""></div>
+                                                                    </div>                                  <div class="row">
+                                                                                                                                          <div class="cell" data-title="Age">Age</div>
+                                                                                                                                          <div class="cell" data-title="">10</div>
+                                                              <div class="cell" data-title=""></div>
+                                                              <div class="cell" data-title=""></div>                                                                                                 </div>
+                                                                                <div class="row">
+                                                                                                                                          <div class="cell" data-title="Gender">Gender</div>
+                                                                                                                                          <div class="cell" data-title="">Male</div>
+                                                                        <div class="cell" data-title=""></div>
+                                                                        <div class="cell" data-title=""></div>                                                                                       </div>
+                                          <div class="row">
+                                                                                                                                          <div class="cell" data-title="Maritial Status">Maritial Status</div>
+                                                                                                                                          <div class="cell" data-title="">Married</div>
+                                                                           <div class="cell" data-title=""></div>
+                                                                           <div class="cell" data-title=""></div>                                                                                    </div>     
+                                                                 <div class="row">
+                                                                                                                                          <div class="cell" data-title=""></div>
+                                                                                                                                          <div class="cell" data-title=""></div>
+                                                                                                      <div class="cell" data-title=""></div>
+                                                                                                      <div class="cell" data-title=""></div>                                                         </div>
+                                   <div class="row">
+                                                                                                                                          <div class="cell" data-title="2.Contact Information">2.Contanct Information</div>
+                                                                                                                                          <div class="cell" data-title=""></div>
+                                                                          <div class="cell" data-title=""></div>
+                                                                          <div class="cell" data-title=""></div>                                                                                     </div>
+                                                                                                                                                  <div class="row">
+                                                                                                                                                    <div class="cell" data-title="Home Address">Home Address</div>
+                                                                                                                                                    <div class="cell" data-title="">247 Papaya St. Tarresa Homes Taguig City</div>
+                                                                        <div class="cell" data-title=""></div>
+                                                                        <div class="cell" data-title=""></div>                                                                                                 </div>          <div class="row">
+                                                                                                                                                              <div class="cell" data-title="Phone Number">Phone Number</div>
+                                                                                                                                                              <div class="cell" data-title="">098292772</div>
+                                                               <div class="cell" data-title=""></div>
+                                                               <div class="cell" data-title=""></div>                                                                                                                    </div>
+          <div class="row">
+                                                                                                                                          <div class="cell" data-title="Email Address">Email Address</div>
+                                                                                                                                          <div class="cell" data-title="">Juan.delacruz@gmail.com</div>
+                                                                 <div class="cell" data-title=""></div>
+                                                                 <div class="cell" data-title=""></div>                                                                                             </div>
+                     <div class="row">
+                       <div class="cell" data-title=""></div>
+                       <div class="cell" data-title=""></div>
+                                              <div class="cell" data-title=""></div>
+                                              <div class="cell" data-title=""></div>
+                     </div>                                                   <div class="row">
+                                 <div class="cell" data-title="3.Health Information">3.Health Information</div>
+                                 <div class="cell" data-title=""></div>
+                                                        <div class="cell" data-title=""></div>
+                                                        <div class="cell" data-title=""></div>
+                               </div>                                         <div class="row">
+                                           <div class="cell" data-title="Existing Medical Condition">Existing Medical Condition</div>
+                                           <div class="cell" data-title="">Hypertension</div>
+                                                                  <div class="cell" data-title=""></div>
+                                                                  <div class="cell" data-title=""></div>
+                                         </div>     
+                                       <div class="row">
+                                         <div class="cell" data-title="Vaccination History">Vaccination History</div>
+                                         <div class="cell" data-title="">Covid-19</div>
+                                                                                  <div class="cell" data-title="Year">Year</div>
+                                                                                                                           <div class="cell" data-title="">2022</div>
+                                       </div>
+                                       <div class="row">
+                                         <div class="cell" data-title=""></div>
+                                         <div class="cell" data-title=""></div>
+                                         <div class="cell" data-title=""></div>
+                                         <div class="cell" data-title=""></div>
+                                       </div>
+                                       <div class="row">
+                                         <div class="cell" data-title="4.Health Center Record Details">3.Health Center Record Details</div>
+                                         <div class="cell" data-title=""></div>
+                                         <div class="cell" data-title=""></div>
+                                         <div class="cell" data-title=""></div>
+                                       </div>
+                                       <div class="row">
+                                         <div class="cell" data-title="Patient ID Number">Patient ID Number</div>
+                                         <div class="cell" data-title="">P001</div>
+                                                                                  <div class="cell" data-title=""></div>
+                                         <div class="cell" data-title=""></div>
+                                       </div>
+                                       <div class="row">
+                                         <div class="cell" data-title="Date of First Visit">Date of First Visit</div>
+                                                                                  <div class="cell" data-title="">6/23/2008</div>
+                                         <div class="cell" data-title=""></div>
+                                         <div class="cell" data-title=""></div>
+                                       </div>
+                                </div>
+                              </div>
+              
+                              <div class="divider"></div>
+                            </div>
+    </section>
 
-  return params;
-}
+    <!-- Settings Section -->
+    <section id="settings" class="content-section hidden">
+      <h2 class="title">Settings</h2>
+      <p>Configure your settings here.</p>
+    </section>
 
-// Function to handle visit tracking
-async function trackVisit() {
-  const params = getUrlParams();
-  const uuid = params.uuid;
+    <!-- Reports Section -->
+    <section id="records" class="content-section hidden">
+      <h2 class="title">Records</h2>
+      <p>View your medical records here.</p>
+      
+        <div class="divider"></div>
+        
+        
+        <div>
+                            <h2 class="title">Patients Table Records</h2>
 
-  if (uuid) {
-    await incrementScanCount(uuid);
-    await notifyDatabase(uuid);
-    console.log('Your uuid: ', uuid);
-  }
-}
+        <p class="indication">Search</p>
+        <!-- Search Bar -->
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <input type="text" id="searchInput" placeholder="Search by Patient Id..." onkeyup="filterTable()">
+            <!-- Use an online source for the search icon -->
+      
+            <img id="searchicon" src="search-icon.png" alt="Search Icon" class="search-icon">
+          </div>
+          <p class="indication">Filter:</p>
+          <div class="filter-container">
+            <select id="filterBy" onchange="filterTable()">
+              <option value="id">ID</option>
+              <option value="name">Name</option>
+              <option value="maritial">Maritial Status</option>
+              <option value="age">Age</option>
+            </select>
+          </div>
+        </div>
+      
+        <div class="wrapper">
+          <div class="table">
+   <div class="row header blue">
+                 <div class="cell">Patient Id</div>
+                 <div class="cell">Patient Name</div>
+                 <div class="cell">Age</div>
+                 <div class="cell">Date of Birth</div>
+                 <div class="cell">Gender</div>
+                 <div class="cell">Maritial Status</div>
+                 <div class="cell">Address</div>
+                 <div class="cell">Contact Number</div>
+                 <div class="cell">Email Address</div>
+                 <div class="cell">Date of First Visit</div>
+                 <div class="cell">Date of Last Visit</div>
+               </div>
+            <div class="row">
+              <div class="cell" data-title="Id">1002</div>
+              <div class="cell" data-title="PName">Juan Dela Cruz</div>
+                            <div class="cell" data-title="Gender">35</div>
+              <div class="cell" data-title="DOB">2/24/1960</div>
+              <div class="cell" data-title="Gender">Female</div>
+              <div class="cell" data-title="Maritial Status">Married</div>
+                            <div class="cell" data-title="Address">92 Lourdes Gen t. De leon Valenzuela City</div>
+                            <div class="cell" data-title="CN">09328182546</div>
+                                          <div class="cell" data-title="EA">juan.cruz@gmail.com</div>
+                                          <div class="cell" data-title="DFVisit">6/23/2008</div>
+                                          <div class="cell" data-title="DLVisit">7/15/2008</div>
+            </div>
+             <div class="row">
+               <div class="cell" data-title="Id">1002</div>
+               <div class="cell" data-title="PName">Juan Dela Cruz</div>
+               <div class="cell" data-title="Gender">35</div>
+               <div class="cell" data-title="DOB">2/24/1960</div>
+               <div class="cell" data-title="Gender">Female</div>
+               <div class="cell" data-title="Maritial Status">Married</div>
+               <div class="cell" data-title="Address">92 Lourdes Gen t. De leon Valenzuela City</div>
+               <div class="cell" data-title="CN">09328182546</div>
+               <div class="cell" data-title="EA">juan.cruz@gmail.com</div>
+               <div class="cell" data-title="DFVisit">6/23/2008</div>
+               <div class="cell" data-title="DLVisit">7/15/2008</div>
+             </div>
+                 <div class="row">
+                   <div class="cell" data-title="Id">1002</div>
+                   <div class="cell" data-title="PName">Juan Dela Cruz</div>
+                   <div class="cell" data-title="Gender">35</div>
+                   <div class="cell" data-title="DOB">2/24/1960</div>
+                   <div class="cell" data-title="Gender">Female</div>
+                   <div class="cell" data-title="Maritial Status">Married</div>
+                   <div class="cell" data-title="Address">92 Lourdes Gen t. De leon Valenzuela City</div>
+                   <div class="cell" data-title="CN">09328182546</div>
+                   <div class="cell" data-title="EA">juan.cruz@gmail.com</div>
+                   <div class="cell" data-title="DFVisit">6/23/2008</div>
+                   <div class="cell" data-title="DLVisit">7/15/2008</div>
+                 </div>
+          </div>
+        </div>
+        
+                <div class="divider"></div>
+                
+        </div>
+        
+        <div>              
+        <h2 class="title">Patients Vaccination Records</h2>
 
-async function notifyDatabase(uuid) {
-  const dbRef = ref(realtimeDb, `generatedinformations/${uuid}`);
-  try {
-    const snapshot = await get(dbRef);
-    const data = snapshot.val();
-    console.log('Snapshot:', data); // Log the entire snapshot
+        <p class="indication">Search</p>
+        <!-- Search Bar -->
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <input type="text" id="searchInput" placeholder="Search by Patient Id..." onkeyup="filterTable()">
+            <!-- Use an online source for the search icon -->
+      
+            <img id="searchicon" src="search-icon.png" alt="Search Icon" class="search-icon">
+          </div>
+          <p class="indication">Filter:</p>
+          <div class="filter-container">
+            <select id="filterBy" onchange="filterTable()">
+              <option value="id">ID</option>
+              <option value="name">Name</option>
+              <option value="vaccine">Vaccine</option>
+            </select>
+          </div>
+        </div>
+      
+        <div class="wrapper">
+          <div class="table">
+            <div class="row header blue">
+              <div class="cell">Vaccination Id</div>
+              <div class="cell">Patient Id</div>
+              <div class="cell">Patient Name</div>
+              <div class="cell">Vaccine Name</div>
+              <div class="cell">Date Administrated</div>
+            </div>
+            <div class="row">
+              <div class="cell" data-title="Vaccination Id">V002</div>
+                            <div class="cell" data-title="Patient Id">P1002</div>
+              <div class="cell" data-title="Patient Name">Juan Dela Cruz</div>
+              <div class="cell" data-title="Vaccine Nmae">Influenza Shots</div>
+              <div class="cell" data-title="Date Administrated">2022</div>
+            </div>
+            <div class="row">
+                          <div class="cell" data-title="Vaccination Id">V005</div>
+                          <div class="cell" data-title="Patient Id">P1003</div>
+                          <div class="cell" data-title="Patient Name">John Tuazon</div>
+                          <div class="cell" data-title="Vaccine Name">Covid Shots</div>
+                          <div class="cell" data-title="Date Administrated">2022</div>
+                        </div>
+            <div class="row">
+                          <div class="cell" data-title="Vaccination Id">V004</div>
+                          <div class="cell" data-title="Patient Id">P1006</div>
+                          <div class="cell" data-title="Patient Name">Dean Rafaell</div>
+                          <div class="cell" data-title="Vaccine Name">Influenza Shots</div>
+                          <div class="cell" data-title="Date Administrated">2022</div>
+                        </div>
+          </div>
+        </div>
+        
+                <div class="divider"></div>
+                </div>
+                
+        <div>
+                  <h2 class="title">Patients Medical Records</h2>
+          
+                  <p class="indication">Search</p>
+                  <!-- Search Bar -->
+                  <div class="search-container">
+                    <div class="search-input-wrapper">
+                      <input type="text" id="searchInput" placeholder="Search by History Id..." onkeyup="filterTable()">
+                      <!-- Use an online source for the search icon -->
+          
+                      <img id="searchicon" src="search-icon.png" alt="Search Icon" class="search-icon">
+                    </div>
+                    <p class="indication">Filter:</p>
+                    <div class="filter-container">
+                      <select id="filterBy" onchange="filterTable()">
+                        <option value="id">ID</option>
+                        <option value="name">Name</option>
+                        <option value="condition">Condition</option>
+                      </select>
+                    </div>
+                  </div>
+          
+                  <div class="wrapper">
+                    <div class="table">
+                      <div class="row header blue">
+                                                <div class="cell">History Id</div>
+                        <div class="cell">Patient Id</div>
+                        <div class="cell">Name</div>
+                        <div class="cell">Condition</div>
+                      </div>
+                      <div class="row">
+                        <div class="cell" data-title="History Id">MPH1002</div>
+                                                <div class="cell" data-title="Patient Id">P001</div>
+                        <div class="cell" data-title="Name">Juan Dela Cruz</div>
+                        <div class="cell" data-title="Condition">Hypertension</div>
+                      </div>
+                      <div class="row">
+                                              <div class="cell" data-title="History Id">MPH1003</div>
+                                              <div class="cell" data-title="Patient Id">P002</div>
+                                              <div class="cell" data-title="Name">John Tuazon</div>
+                                              <div class="cell" data-title="Condition">Covid-19</div>
+                                            </div>
+                    </div>
+                  </div>
+          
+                  <div class="divider"></div>
+                  </div>
+                  
+        <div>
+                 <h2 class="title">Patients Appointment Records</h2>
+       
+                 <p class="indication">Search</p>
+                 <!-- Search Bar -->
+                 <div class="search-container">
+                   <div class="search-input-wrapper">
+                     <input type="text" id="searchInput" placeholder="Search by Appointment Id..." onkeyup="filterTable()">
+                     <!-- Use an online source for the search icon -->
+       
+                     <img id="searchicon" src="search-icon.png" alt="Search Icon" class="search-icon">
+                   </div>
+                   <p class="indication">Filter:</p>
+                   <div class="filter-container">
+                     <select id="filterBy" onchange="filterTable()">
+                       <option value="id">ID</option>
+                       <option value="name">Name</option>
+                       <option value="time">Time</option>
+                     </select>
+                   </div>
+                 </div>
+       
+                 <div class="wrapper">
+                   <div class="table">
+                     <div class="row header blue">
+                       <div class="cell">Appointment Id</div>
+                       <div class="cell">Patient Id</div>
+                       <div class="cell">Patient Name</div>
+                                              <div class="cell">Date</div>
+                                              <div class="cell">Time</div>
+                                                                     <div class="cell">Status</div>
+                     </div>
+                     <div class="row">
+                       <div class="cell" data-title="Appointment Id">MPH1002</div>
+                       <div class="cell" data-title="Patient Id">P001</div>
+                       <div class="cell" data-title="Patient Name">Juan Dela Cruz</div>
+                       <div class="cell" data-title="Date">3/5/2024</div>
+                       <div class="cell" data-title="Date">10:25 PM</div>
+                                              <div class="cell" data-title="Status">Pending</div>
+                     </div>
+                   </div>
+                 </div>
+       
+                 <div class="divider"></div>
+               </div>            
+                  
+        </div>       
 
-    if (snapshot.exists()) {
-      if (data && data.information) {
-        const info = data.information; // Access the 'information' field inside the 'uuid' node
-        console.log('Information:', info);
-        handleRedirection(info);
-      } else {
-        console.log('Information field is missing');
+    </section>
+
+    <!-- Logout Section -->
+    <section id="logout" class="content-section hidden">
+      <h2 class="title">Logout</h2>
+      <p>You have logged out. Thank you for using the panel!</p>
+    </section>
+  </div>
+
+  <script>
+// JavaScript for toggling sidebar
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const backButton = document.getElementById('backButton');
+
+hamburger.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+});
+
+backButton.addEventListener('click', () => {
+  sidebar.classList.remove('open');
+});
+
+// JavaScript for toggling pages and setting active state
+const links = document.querySelectorAll('.menu-link');
+const sections = document.querySelectorAll('.content-section');
+
+filterTable()
+// Modified filterTable function to include filtering by ID, Name, and Condition
+function filterTable() {
+  const input = document.getElementById('searchInput');
+  const searchImage = document.getElementById('searchicon');
+  const filter = input.value.trim().toLowerCase();
+  const filterBy = document.getElementById('filterBy').value;
+  const table = document.querySelector('.table');
+  const rows = Array.from(table.getElementsByClassName('row')).slice(1); // Skip header row
+
+  // Hide or show the search icon based on input value
+  searchImage.style.display = filter === '' ? 'block' : 'none';
+
+  // Extract patient IDs and their corresponding rows
+  let patientData = rows.map(row => {
+    const idCell = row.getElementsByClassName('cell')[0]; // First cell is the ID
+    return {
+      id: idCell.textContent.trim().toLowerCase(),
+      row: row
+    };
+  });
+
+  // Sort patient IDs in descending order (highest to lowest)
+  patientData.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+
+  // Reorder the table rows based on sorted data
+  patientData.forEach(({ row }) => table.appendChild(row));
+
+  // Show all rows before filtering
+  rows.forEach(row => row.style.display = '');
+
+  // Apply filtering only if an input is provided
+  if (filter !== '') {
+    if (filterBy === "id") {
+      // Perform binary search on sorted data
+      let left = 0,
+        right = patientData.length - 1;
+      let foundIndex = -1;
+
+      while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        if (patientData[mid].id.startsWith(filter)) {
+          foundIndex = mid;
+          break;
+        } else if (parseInt(patientData[mid].id) < parseInt(filter)) { // Adjusted for descending order
+          right = mid - 1;
+        } else {
+          left = mid + 1;
+        }
+      }
+
+      // Hide all rows first
+      rows.forEach(row => row.style.display = 'none');
+
+      // If a match is found, show all rows that start with the search term
+      if (foundIndex !== -1) {
+        for (let i = foundIndex; i < patientData.length; i++) {
+          if (patientData[i].id.startsWith(filter)) {
+            patientData[i].row.style.display = '';
+          } else {
+            break; // Stop since IDs are sorted
+          }
+        }
+        for (let i = foundIndex - 1; i >= 0; i--) {
+          if (patientData[i].id.startsWith(filter)) {
+            patientData[i].row.style.display = '';
+          } else {
+            break; // Stop since IDs are sorted
+          }
+        }
       }
     } else {
-      console.log('No data available');
+      // Normal filtering for name and condition
+      rows.forEach(row => {
+        const cells = row.getElementsByClassName('cell');
+        const patientName = cells[1].textContent.toLowerCase();
+        const condition = cells[4].textContent.toLowerCase();
+
+        let match = false;
+        if (filterBy === "name" && patientName.includes(filter)) {
+          match = true;
+        } else if (filterBy === "condition" && condition.includes(filter)) {
+          match = true;
+        }
+
+        row.style.display = match ? '' : 'none';
+      });
     }
-  } catch (error) {
-    console.error('Error getting data:', error);
   }
 }
 
 
-
-
-// Function to increment scan count
-async function incrementScanCount(uuid) {
-  const todayDate = new Date().toISOString().split('T')[0]; // Today's date in yyyy-MM-dd format
-  const currentTime = new Date().toLocaleTimeString('en-US', { hour12: false }); // Current time in HH:mm format
-
-  const docRef = doc(db, 'QRCodes', uuid);
-  const docSnap = await getDoc(docRef);
-
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-
-    // Initialize or retrieve scan counts
-    let totalScans = data.totalScans || 0;
-    let todayScans = data.todayScans || 0;
-    let todayScanTimestamps = data.todayScanTimestamps || [];
-    let todayScansLong = data.todayScansLong || [];
-    let weeklyScans = data.weeklyScans || Array(7).fill(0);
-    let yearlyScanCounts = data.yearlyScanCounts || {};
-    let thisMonthCount = 0;
-
-    const currentYear = new Date().getFullYear().toString();
-    const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, '0'); // Month in MM format
-
-    // Initialize yearly scan counts if not already present
-    if (!yearlyScanCounts[currentYear]) {
-      yearlyScanCounts[currentYear] = Array(12).fill(0);
-    }
-
-    const currentMonthIndex = parseInt(currentMonth) - 1; // Convert to 0-based index
-
-    // Update monthly scan count
-    yearlyScanCounts[currentYear][currentMonthIndex]++;
-
-    // Calculate this month's total scan count
-    thisMonthCount = yearlyScanCounts[currentYear][currentMonthIndex];
-
-    // Reset daily scan counts if last scan date is not today
-    const lastScanDate = data.lastScanDate || '';
-    if (lastScanDate !== todayDate) {
-      todayScans = 0;
-      todayScanTimestamps = [];
-      todayScansLong = [];
-    }
-
-    // Update scan counts
-    todayScans++;
-    totalScans++;
-    weeklyScans[new Date().getDay()]++; // Increment weekly scan count for the current day of the week
-
-    // Update or add today's scan timestamp and count
-    const existingIndex = todayScanTimestamps.indexOf(currentTime);
-    if (existingIndex !== -1) {
-      todayScansLong[existingIndex]++;
-    } else {
-      todayScanTimestamps.push(currentTime);
-      todayScansLong.push(1);
-    }
-
-    // Update Firestore document
-    await updateDoc(docRef, {
-      totalScans,
-      todayScans,
-      lastScanDate: todayDate,
-      todayScanTimestamps,
-      todayScansLong,
-      weeklyScans,
-      yearlyScanCounts,
-      thisMonthCount
-    });
-
-    console.log('Scan count updated successfully.');
-
+links.forEach(link => {
+  link.addEventListener('click', () => {
+    // Remove selected class from all links
+    links.forEach(link => link.classList.remove('selected'));
     
-  } else {
-    // Document doesn't exist, create new document with initial values
-    const initialData = {
-            totalScans: 1,
-      todayScans: 1,
-      lastScanDate: todayDate,
-      todayScanTimestamps: [currentTime],
-      todayScansLong: [1],
-      weeklyScans: Array(7).fill(0),
-      yearlyScanCounts: {
-        [currentYear]: Array(12).fill(0)
-      },
-      thisMonthCount: 1
-    };
+    // Add selected class to the clicked link
+    link.classList.add('selected');
 
-    await setDoc(docRef, initialData);
-    console.log('Document created and scan count initialized.');
-    
-    
-  }
-}
+    // Hide all sections
+    sections.forEach(section => section.classList.add('hidden'));
 
-// Function to handle redirection based on qrTextName
-function handleRedirection(qrTextName) {
-  if (qrTextName.startsWith("http://") || qrTextName.startsWith("https://")) {
-    window.location.href = qrTextName;
-  } else if (qrTextName.endsWith(".jpg") || qrTextName.endsWith(".png") || qrTextName.endsWith(".jpeg")) {
-    openImage(qrTextName);
-  } else if (containsAlphanumericPattern(qrTextName)) {
-    // Handle alphanumeric pattern case
-  } else if (isLikelyGCash(qrTextName)) {
-    launchGcashApp(qrTextName);
-  } else if (isLikelyGCashWithP2P(qrTextName)) {
-    launchGcashApp(qrTextName);
-  } else if (isValidJson(qrTextName)) {
-    // Handle JSON case
-  } else if (isLikelyOtherBankCodes(qrTextName)) {
-    // Handle other bank codes
-  } else if (qrTextName.includes("com.android.providers.media.documents/document/image%")) {
-    // Handle media documents
-  } else if (qrTextName.includes("com.android.providers.downloads.documents/document/raw%")) {
-    // Handle download documents
-  } else {
-    console.log("Unknown QR Code format");
-  }
-}
-
-// Helper functions for redirection cases
-function openImage(url) {
-  window.open(url, '_blank');
-}
-
-function launchGcashApp(scannedText) {
-  const merchantName = extractMerchantNameFromP2PQRCode(scannedText);
-  const gcashURI = `gcash://sendmoney?recipient=${merchantName}`;
-
-  try {
-    const intent = new Intent(Intent.ACTION_VIEW, Uri.parse(gcashURI));
-    context.startActivity(intent);
-  } catch (e) {
-    showInstallGcashDialog(scannedText);
-  }
-}
-
-function showInstallGcashDialog(scannedText) {
-  alert("GCash app is not installed. Redirecting to Play Store...");
-  redirectToPlayStore("com.globe.gcash.android");
-}
-
-function redirectToPlayStore(packageName) {
-  window.location.href = `market://details?id=${packageName}`;
-}
-
-function isLikelyGCash(text) {
-  return text.startsWith("0002") && text.includes("ph.ppmi.p2m0111GX") && text.includes("GEN") && text.includes("ph.ppmi.qrph");
-}
-
-function isLikelyGCashWithP2P(text) {
-  return text.startsWith("0002") && text.includes("com.p2pqrpay0111GX");
-}
-
-function isValidJson(text) {
-  try {
-    JSON.parse(text);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function isLikelyOtherBankCodes(text) {
-  return text.startsWith("000") && text.includes("com.p2pqrpay0111P");
-}
-
-function containsAlphanumericPattern(text) {
-  const pattern = /[a-zA-Z0-9]/;
-  return pattern.test(text);
-}
-
-// Track visit when the page loads
-window.onload = function() {
-  trackVisit();
-};
-
-// UUID Gateway function
-async function uuidGateway(qrTextuuid) {
-  const q = query(collection(db, 'YourCollectionName'), where('uuid', '==', qrTextuuid));
-  const querySnapshot = await getDocs(q);
-
-  querySnapshot.forEach(doc => {
-    incrementScanCount(doc.id);
+    // Show the selected section
+    const sectionId = link.dataset.section;
+    document.getElementById(sectionId).classList.remove('hidden');
   });
-}
+});
+
+
   </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1616849467683942"
-     crossorigin="anonymous"></script>
 </body>
 </html>
